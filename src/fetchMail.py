@@ -12,13 +12,13 @@ def decode_mail(msg: str):
     for part in msg.walk():
         if part.get_content_type() == 'text/plain':
             content = part.get_payload(decode=True).decode('utf-8')
-            print(content)
+            print(content, end = "\t")
             cmd_list += content
     
     cmd_list = cmd_list.replace('\n', ' ').replace('\r', ' ').split()
-
-    print(cmd_list)
-    return sender, cmd_list # one string or list of strings (unstripped)
+    print()
+    # print(cmd_list)
+    return sender, cmd_list
 
 
 def fetch_mail():
@@ -43,10 +43,10 @@ def fetch_mail():
     mail.logout()
     return sender, cmd_list
 
-while True:
-    sender, cmd_list = fetch_mail()
-    if len(cmd_list) != 0:
-        if ("quit" in cmd_list):
-            print("Quit")
-            break
-        time.sleep(5)
+# while True:
+#     sender, cmd_list = fetch_mail()
+#     if len(cmd_list) != 0:
+#         if ("quit" in cmd_list):
+#             print("Quit")
+#             break
+#         time.sleep(5)
