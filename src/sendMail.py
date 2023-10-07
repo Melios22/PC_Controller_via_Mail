@@ -1,6 +1,7 @@
 from fetchMail import *
 
-import smtplib
+#! import: fetchMail, other command
+
 
 def send_mail(sender: str, cmd_list: list):
 
@@ -17,12 +18,16 @@ def send_mail(sender: str, cmd_list: list):
 
         smtp.sendmail(USERNAME, sender, email_content)
 
-while True:
-    sender, cmd_list = fetch_mail()
-    if len(cmd_list) != 0:
-        send_mail(sender, cmd_list)
-        if ("quit" in cmd_list):
-            print("Quit")
-            break
-        time.sleep(5)
+#? Turn on when runnign the program
+# while True:
+#     sender, cmd_list = fetch_mail()
+#     if len(cmd_list) != 0:
+#         # Command()
+#
+#         send_mail(sender, cmd_list)
+#         if ("quit" in cmd_list):
+#             print("Quit")
+#             break
+#         time.sleep(5)
+
 
