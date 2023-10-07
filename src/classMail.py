@@ -1,5 +1,4 @@
 from constant import *
-
 from utilities import *
 
 
@@ -64,9 +63,34 @@ class Mail:
             )
             self.email_message.attach(picture_attachment)
 
+    def shut_down(self):
+        time: int = 10
+        if len(self.cmd_list) > 1:
+            time = int(self.cmd_list[1])
+
+        self.email_message = MIMEMultipart()
+
+        self.body = "Shutting down your PC in " + str(time) + " seconds."
+
+        self.email_message.attach(MIMEText(self.body, "plain"))
+        self.email_message["From"] = USERNAME
+        self.email_message["To"] = self.sender
+        self.email_message["Subject"] = self.subject + "Shutdown"
+
+        self.send_mail()
+
+        while time > 0:
+            print(f"{time} seconds left until shutdown")
+            time -= 1
+            sleep(1)
+
+        os.system("shutdown /s /t 0")
+
     def process_command(self):
         if self.cmd_list[0] == "screenshot":
             self.take_screenshot()
+        elif self.cmd_list[0] == "shutdown":
+            self.shut_down()
         else:
             pass
 
@@ -75,6 +99,7 @@ class Mail:
         self.cmd_list = []
 
         self.body = ""
+        self.email_message = None
 
     def loop(self):
         while True:
@@ -84,5 +109,5 @@ class Mail:
                 self.send_mail()
                 self.refresh()
 
-            time.sleep(2)
+            sleep(2)
             print("Waiting for new mail...")
