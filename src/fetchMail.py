@@ -1,6 +1,5 @@
 from constant import *
-import imaplib, smtplib, email, time
-import pyautogui, os
+import imaplib, email, time
 
 #! import: constant, lib
 
