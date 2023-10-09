@@ -1,7 +1,6 @@
 from constant import *
 from utilities import *
 
-
 class Mail:
     def __init__(self):
         self.sender: str = ""
@@ -35,7 +34,7 @@ class Mail:
             smtp.login(USERNAME, APP_PASS)
 
             smtp.sendmail(USERNAME, self.sender, self.email_message.as_string())
-            print("Mail sent to", self.sender)
+            print("Mail sent to ", self.sender)
 
     def take_screenshot(self):
         file_name: str = "Picture.png"
