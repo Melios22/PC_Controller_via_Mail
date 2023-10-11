@@ -1,5 +1,5 @@
 from classMail import *
-
+from loading import *
 
 def main():
     mail = Mail()
@@ -17,7 +17,8 @@ def test_main():
 
 if __name__ == "__main__":
     try:
-        test_main()
-        # main()
+        # test_main()
+        main()
     except KeyboardInterrupt:
-        print("Quit")
+        print("Quit                            ")
+        

@@ -1,6 +1,6 @@
 from constant import *
 from utilities import *
-
+from loading import *
 
 class Mail:
     def __init__(self):
@@ -215,13 +215,18 @@ class Mail:
         self.email_message = None
 
     def loop(self):
+        spinner = CLI_Spinner("\rWaiting for new mail ", 0.5)
+        spinner.start()
         while True:
             self.fetch_mail()
             if len(self.cmd_list) != 0:
+                spinner.stop()
                 # print(self.cmd_list)
                 self.process_command()
                 self.send_mail()
                 self.refresh()
+                if not spinner.process.is_alive():
+                    spinner = CLI_Spinner("\rWaiting for new mail ", 0.5)
+                    spinner.start()
 
             sleep(2)
-            print("Waiting for new mail...")
