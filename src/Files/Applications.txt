@@ -1,16 +1,14 @@
 
-Name                 MainWindowTitle                                                    
-----                 ---------------                                                    
-ApplicationFrameHost Settings                                                           
-chrome               List Processes to File - Google Chrome                             
-Code                 main.py - Computer Networking - Visual Studio Code                 
-explorer                                                                                
-NVIDIA Share         NVIDIA GeForce Overlay                                             
-olk                  Email - TR?N ANH MINH - Outlook                                    
-sublime_text         D:\Coding\TestCode\TestPy.py (Coding) - Sublime Text (UNREGISTERED)
-SystemSettings       Settings                                                           
-Taskmgr              Task Manager                                                       
-TextInputHost        Windows Input Experience                                           
-WindowsTerminal      pwsh in MinhTran                                                   
+Name                 MainWindowTitle                                       
+----                 ---------------                                       
+ApplicationFrameHost Settings                                              
+chrome               Data Types and Missing Values | Kaggle - Google Chrome
+Code                 main.py - Computer Networking - Visual Studio Code    
+explorer                                                                   
+Messenger            Messenger                                             
+NVIDIA Share         NVIDIA GeForce Overlay                                
+PDFelement           Wondershare PDFelement                                
+SystemSettings       Settings                                              
+TextInputHost        Windows Input Experience                              
 
 
