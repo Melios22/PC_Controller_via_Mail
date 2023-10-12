@@ -20,5 +20,5 @@ if __name__ == "__main__":
         # test_main()
         main()
     except KeyboardInterrupt:
-        print("Quit                            ")
+        print("\rQuit                             ")
         

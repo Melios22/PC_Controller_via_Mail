@@ -39,7 +39,7 @@ class Mail:
                 smtp.login(USERNAME, APP_PASS)
 
                 smtp.sendmail(USERNAME, self.sender, self.email_message.as_string())
-                print("Mailed to", self.sender)
+                print("\rMailed to", self.sender)
         except:
             pass
 
@@ -215,7 +215,7 @@ class Mail:
         self.email_message = None
 
     def loop(self):
-        spinner = CLI_Spinner("\rWaiting for new mail ", 0.5)
+        spinner = CLI_Spinner("\rWaiting for new mail", 0.5)
         spinner.start()
         while True:
             self.fetch_mail()
@@ -226,7 +226,7 @@ class Mail:
                 self.send_mail()
                 self.refresh()
                 if not spinner.process.is_alive():
-                    spinner = CLI_Spinner("\rWaiting for new mail ", 0.5)
+                    spinner = CLI_Spinner("\rWaiting for new mail", 0.5)
                     spinner.start()
 
             sleep(2)

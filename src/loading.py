@@ -38,6 +38,7 @@ class CLI_Spinner:
                      n = 0
               time.sleep(self.speed)
             except KeyboardInterrupt:
+                print("\r                            ", end = "")
                 print("\r", end = "")
                 break
     
@@ -50,26 +51,5 @@ class CLI_Spinner:
             return
         else:
             self.process.terminate()
-            print("\r", end = "")
+            print("\r                                   ", end = "")
             return
-
-'''
-
-    def loop(self):
-        spinner = CLI_Spinner("\rWaiting for new mail ", 0.5)
-        spinner.start()
-        while True:
-            self.fetch_mail()
-            if len(self.cmd_list) != 0:
-                spinner.stop()
-                # print(self.cmd_list)
-                self.process_command()
-                self.send_mail()
-                self.refresh()
-                if not spinner.process.is_alive():
-                    spinner = CLI_Spinner("\rWaiting for new mail ", 0.5)
-                    spinner.start()
-
-            sleep(2)
- 
-'''
