@@ -4,7 +4,7 @@ from constant import *
 def decode_mail(msg: str):
     cmd_list = ""
 
-    print("-----------------------------")
+    print("\r-----------------------------")
     sender = email.utils.parseaddr(msg.get("From"))[1]
     print("From:", sender)
     print("Content:", end=" ")
