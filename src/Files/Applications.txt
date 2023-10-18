@@ -1,14 +1,11 @@
-
-Name                 MainWindowTitle                                       
-----                 ---------------                                       
-ApplicationFrameHost Settings                                              
-chrome               Data Types and Missing Values | Kaggle - Google Chrome
-Code                 main.py - Computer Networking - Visual Studio Code    
-explorer                                                                   
-Messenger            Messenger                                             
-NVIDIA Share         NVIDIA GeForce Overlay                                
-PDFelement           Wondershare PDFelement                                
-SystemSettings       Settings                                              
-TextInputHost        Windows Input Experience                              
-
-
+Running Applications:
+======================
+ApplicationFrameHost
+chrome
+Code
+explorer
+Messenger
+NVIDIA Share
+sublime_text
+SystemSettings
+TextInputHost

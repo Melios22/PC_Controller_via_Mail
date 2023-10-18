@@ -10,7 +10,6 @@ class Mail:
         self.subject: str = "Re: Mail Control: "
         self.body: str = ""
         self.email_message: MIMEMultipart
-
     def fetch_mail(self):
         try:
             # ? Login to the mail server and select the inbox
@@ -217,7 +216,7 @@ class Mail:
     def loop(self):
         while True:
             self.fetch_mail()
-            if len(self.cmd_list) != 0:
+            if self.cmd_list:
                 # print(self.cmd_list)
                 self.process_command()
                 self.send_mail()
