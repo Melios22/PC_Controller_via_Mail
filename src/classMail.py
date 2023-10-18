@@ -218,7 +218,7 @@ class Mail:
         spinner.start()
         while True:
             self.fetch_mail()
-            if len(self.cmd_list) != 0:
+            if self.cmd_list:
                 spinner.stop()
                 # print(self.cmd_list)
                 self.process_command()
