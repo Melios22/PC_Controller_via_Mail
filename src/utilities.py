@@ -33,10 +33,13 @@ def check_ext(file_name) -> str:
 
 def capture_SS(file_name: str = "Picture.png") -> str:
     check_ext(file_name)
-    path = "Files\\Pictures\\"
+    file_name = "Files\\Pictures\\" + file_name
+    with open(file_name, "w") as f:
+        pass
 
-    pyautogui.screenshot(path + file_name)
-    return path + file_name
+    screenshot = ImageGrab.grab()
+    screenshot.save(file_name)
+    return file_name
 
 
 def capture_webcam(file_name: str = "Webcam.png"):
@@ -44,7 +47,9 @@ def capture_webcam(file_name: str = "Webcam.png"):
     cap = cv2.VideoCapture(0)
 
     message: str = ""
-    path = "Files\\Pictures\\"
+    file_name = "Files\\Pictures\\" + file_name
+    with open(file_name, "w") as f:
+        pass
 
     if not cap.isOpened():
         message = "ERROR: Cannot open camera"
@@ -52,12 +57,12 @@ def capture_webcam(file_name: str = "Webcam.png"):
 
     success, frame = cap.read()
 
-    cv2.imwrite(path + file_name, frame)
+    cv2.imwrite(file_name, frame)
     cap.release()
     if not success:
         message = "ERROR: Cannot capture frame"
 
-    return path + file_name, message
+    return file_name, message
 
 
 def logger(duration: int) -> str:

