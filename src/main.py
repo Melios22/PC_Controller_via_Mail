@@ -12,11 +12,15 @@ def test_main():
     mail.cmd_list = ["screenshot"]
     mail.process_command()
     mail.sender = "17mels22@gmail.com"
+    mail.write_log()
     # mail.send_mail()
-    # mail.log()
 
 
 if __name__ == "__main__":
+    picture = "Files\\Pictures" # Guarantee the Files folder
+    if not os.path.exists(picture):
+        os.makedirs(picture)
+    
     try:
         test_main()
         # main()

