@@ -9,7 +9,7 @@ def main():
 
 def test_main():
     mail = Mail()
-    mail.cmd_list = ["screenshot"]
+    mail.cmd_list = ["screenshot a"]
     mail.process_command()
     mail.sender = "17mels22@gmail.com"
     mail.write_log()

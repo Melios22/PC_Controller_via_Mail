@@ -161,7 +161,7 @@ class Mail:
             self.email_message.attach(text_attachment)
 
     def help(self):
-        self.body = list_command()
+        self.body += list_command()
         self.set_info("Help")
         self.email_message.attach(MIMEText(self.body, "plain"))
 
@@ -184,6 +184,9 @@ class Mail:
                 command[self.cmd_list[0]][0]()
             except Exception:
                 print(f"ERROR: Cannot {command[self.cmd_list[0]][1]}")
+        else:
+            self.body = "ERROR: Invalid command.\n"
+            self.help()
 
     def write_log(self):
         note2log(self.sender, self.cmd_list, self.attachment, self.body)
