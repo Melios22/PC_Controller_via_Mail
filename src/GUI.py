@@ -1,6 +1,6 @@
 # import tkinter
 import customtkinter 
-from PIL import Image, ImageTk
+from PIL import Image
 
 class Popup(customtkinter.CTkToplevel):
     def __init__(self, self_title : str, path : str = None, **kwargs):
@@ -236,11 +236,11 @@ class App(customtkinter.CTk):
         
 
 
-# if __name__ == "__main__":
-#     app = App()
+if __name__ == "__main__":
+    app = App()
 
-#     attachment_list = ["images\\Screenshot.png", "images\\List_Process.txt", "images\\App_Process.txt"]
-#     subject_list = ["Screenshot", "listProcess", "AppProcess"]
-#     # for i in range(5):
-#     #     app.after(3000,app.add_new_mail(sender_mail="sender_mail" + str(i) + "@gmail.com", subject=subject_list[i % 3], date= str(i % 31) + "/" + str(i % 12) + "/2023", reply_subject="reply_subject" + str(i), attachment=attachment_list[i % 3]))
-#     app.mainloop()
+    attachment_list = ["images\\Screenshot.png", "images\\List_Process.txt", "images\\App_Process.txt"]
+    subject_list = ["Screenshot", "listProcess", "AppProcess"]
+    for i in range(5):
+        app.after(3000,app.add_new_mail(sender_mail="sender_mail" + str(i) + "@gmail.com", subject=subject_list[i % 3], date= str(i % 31) + "/" + str(i % 12) + "/2023", reply_subject="reply_subject" + str(i), attachment=attachment_list[i % 3]))
+    app.mainloop()

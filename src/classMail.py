@@ -96,21 +96,14 @@ class Mail:
         os.system("shutdown -l")
 
     def shutdown(self):
-        time: int = 10
-        if len(self.cmd_list) > 1:
-            time = int(self.cmd_list[1])
+        time = self.cmd_list[1] if len(self.cmd_list) > 1 else 10
 
         self.set_info("Shutdown")
         self.body = "Shutting down your PC in " + str(time) + " seconds."
         self.email_message.attach(MIMEText(self.body, "plain"))
 
         self.send_mail()  #! only shutdown process has the send_mail inside
-
-        while time > 0:
-            print(f"{time} seconds left until shutdown")
-            time -= 1
-            sleep(1)
-
+        sleep(2)
         os.system("shutdown /s /t now")
 
     def list_app(self):
@@ -142,10 +135,14 @@ class Mail:
             self.email_message.attach(text_attachment)
 
     def terminate_process(self):
-        self.set_info("Terminate Process")
-        self.body = kill_process(self.cmd_list[1])
+        try:
+            self.set_info("Terminate Process")
+            self.body = kill_process(self.cmd_list[1])
+        except IndexError:
+            self.set_info("Terminate Process Failed")
+            self.body = "ERROR: Missing argument.\n"
         self.email_message.attach(MIMEText(self.body, "plain"))
-
+        
     def send_log(self):
         file_path = "Files\\mail.log"
         self.set_info("Log File")
