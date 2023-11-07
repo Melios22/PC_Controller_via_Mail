@@ -1,4 +1,7 @@
+from threading import Thread
+
 from constant import *
+from GUI import *
 from loading import *
 from utilities import *
 
@@ -142,7 +145,7 @@ class Mail:
             self.set_info("Terminate Process Failed")
             self.body = "ERROR: Missing argument.\n"
         self.email_message.attach(MIMEText(self.body, "plain"))
-        
+
     def send_log(self):
         file_path = "Files\\mail.log"
         self.set_info("Log File")
@@ -187,7 +190,7 @@ class Mail:
 
     def write_log(self):
         note2log(self.sender, self.cmd_list, self.attachment, self.body)
-    
+
     def set_info(self, message: str):
         self.email_message = MIMEMultipart()
         self.email_message["From"] = USERNAME
@@ -202,22 +205,25 @@ class Mail:
         self.body = ""
         self.email_message = None
 
-    def loop(self):
-        spinner = CLI_Spinner("\rWaiting for new mail", 0.5)
-        spinner.start()
-        while True:
-            self.fetch_mail()
-            if self.cmd_list:
-                spinner.stop()
-                # print(self.cmd_list)
-                self.process_command()
-                
-                self.write_log()
-                self.send_mail()
-                self.refresh()
-                
-                if not spinner.process.is_alive():
-                    spinner = CLI_Spinner("\rWaiting for new mail", 0.5)
-                    spinner.start()
+    def run(self, app):
+        # spinner = CLI_Spinner("\rWaiting for new mail", 0.5)
+        # spinner.start()
+        self.fetch_mail()
+        if self.cmd_list:
+            # spinner.stop()
+            # print(self.cmd_list)
+            self.process_command()
+            self.write_log()
 
-            sleep(2)
+            print(self.body, self.attachment)
+            command = " ".join(self.cmd_list)
+            app.add_new_mail(self.sender, command, current_time(), self.body, self.attachment)
+
+            self.send_mail()
+            self.refresh()
+
+            # if not spinner.process.is_alive():
+            #     spinner = CLI_Spinner("\rWaiting for new mail", 0.5)
+            #     spinner.start()
+            
+        app.after(2000, lambda: self.run(app))
