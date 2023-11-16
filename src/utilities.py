@@ -7,16 +7,14 @@ def decode_mail(msg: str):
     print("\r-----------------------------")
     sender = email.utils.parseaddr(msg.get("From"))[1]
     print("From:", sender)
-    print("Content:", end=" ")
+    print("Content:")
     for part in msg.walk():
         if part.get_content_type() == "text/plain":
             content = part.get_payload(decode=True).decode("utf-8")
-            print(content, end="\t")
+            print(content)
             cmd_list += content
 
-    cmd_list = cmd_list.replace("\n", " ").replace("\r", " ").split()
-    # print()
-    # print(cmd_list)
+    cmd_list = [x.split() for x in cmd_list.strip().split("\r\n")]
     return sender, cmd_list
 
 
