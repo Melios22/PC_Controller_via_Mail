@@ -206,12 +206,9 @@ class Mail:
         self.email_message = None
 
     def run(self, app):
-        # spinner = CLI_Spinner("\rWaiting for new mail", 0.5)
-        # spinner.start()
         self.fetch_mail()
         if self.cmd_list:
-            # spinner.stop()
-            # print(self.cmd_list)
+      
             self.process_command()
             self.write_log()
 
@@ -226,4 +223,4 @@ class Mail:
             #     spinner = CLI_Spinner("\rWaiting for new mail", 0.5)
             #     spinner.start()
             
-        app.after(2000, lambda: self.run(app))
+        app.after(1000, lambda : self.run(app))

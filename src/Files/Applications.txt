@@ -1,0 +1,8 @@
+Running Applications:
+======================
+ApplicationFrameHost
+explorer
+python
+SystemSettings
+TextInputHost
+WindowsTerminal

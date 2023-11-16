@@ -1,5 +1,6 @@
 from classMail import *
 from loading import *
+import GUI
 
 
 def main():
@@ -19,11 +20,10 @@ def test_main():
     
 def testmain2():
     mail = Mail()
-    # mail.loop()
-    app = App()
+    GUI.Splash_Screen()
+    app = GUI.App()
     app.after(0, lambda: mail.run(app))
     app.mainloop()
-
 
 if __name__ == "__main__":
     picture = "Files\\Pictures" # Guarantee the Files folder
