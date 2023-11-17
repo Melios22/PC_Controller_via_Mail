@@ -112,8 +112,12 @@ def note2log(sender, cmd_list, attachment, body):
     file_handler.setFormatter(formater)
     key.addHandler(file_handler)
     
-    command = " ".join(cmd_list)
-    line = f"From:\t\t{sender}\nContent:\t{command}\n\n"
+    command = [" ".join(cmd_list[i]) for i in range(len(cmd_list))]
+    command = "\n\t\t\t".join(command)
+    
+    attachment = ", ".join(attachment)
+    # command = " ".join(cmd_list)
+    line = f"From:\t\t{sender}\nContent:\n\t\t\t{command}\n\n"
     line += f"Reply:\t\t{body}\nAttachment:\t{attachment}\n"
     line += "----------------------------------------\n"
     
