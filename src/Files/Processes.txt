@@ -1,9 +1,0 @@
-
-Image Name                     PID 
-========================= ======== 
-System Idle Process              0 
-System                           4 
-Registry                       216 
-smss.exe                       804 
-csrss.exe                     1080 
-wininit.exe                   1172 
