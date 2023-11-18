@@ -223,6 +223,7 @@ class Mail:
             app.add_new_mail(
                 self.sender, command, current_time(), self.body, self.attachment
             )
+            # Thread(target=self.send_mail_async, args=(app, command)).start()
 
             self.send_mail()
             self.refresh()
