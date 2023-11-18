@@ -92,7 +92,7 @@ class Mail:
 
     #! Add log to logout shutdown
     def logout(self, lst: list = []):
-        self.body += "Logging out of your PC."
+        self.body += "Logging out of your PC.\n"
         self.email_message.attach(MIMEText(self.body, "plain"))
 
         self.send_mail()
@@ -101,14 +101,14 @@ class Mail:
     def shutdown(self, lst: list = []):
         time = lst[1] if len(lst) > 1 else 10
 
-        self.body = "Shutting down your PC in " + str(time) + " seconds."
+        self.body = "Shutting down your PC in " + str(time) + " seconds.\n"
         self.email_message.attach(MIMEText(self.body, "plain"))
 
         self.send_mail()  #! only shutdown process has the send_mail inside
         sleep(2)
         os.system("shutdown /s /t now")
 
-    def list_app(self, lst=[]):
+    def list_app(self, lst: list = []):
         self.attachment.append(list_running_application())
 
         self.body += "List of running applications.\n"
@@ -121,7 +121,7 @@ class Mail:
             )
             self.email_message.attach(text_attachment)
 
-    def list_process(self, lst=[]):
+    def list_process(self, lst: list = []):
         self.attachment.append(list_running_process())
 
         self.body += "The list of running processes of your PC attached.\n"
@@ -134,7 +134,7 @@ class Mail:
             )
             self.email_message.attach(text_attachment)
 
-    def terminate_process(self, lst=[]):
+    def terminate_process(self, lst: list = []):
         try:
             self.body += kill_process(lst[1]) + "\n"
         except IndexError:
@@ -154,9 +154,20 @@ class Mail:
             )
             self.email_message.attach(text_attachment)
 
-    def help(self, lst=[]):
-        self.body += list_command()
+    def help(self, lst: list = []):
+        file_path = "Files\\help.txt"
+        writeHelp(file_path)
+
+        self.body += "The list of commands is attached below.\n"
         self.email_message.attach(MIMEText(self.body, "plain"))
+
+        self.attachment.append(file_path)
+        with open(file_path, "r") as text_file:
+            text_attachment = MIMEText(text_file.read())
+            text_attachment.add_header(
+                "Content-Disposition", "attachment; filename= mail.log"
+            )
+            self.email_message.attach(text_attachment)
 
     def process_command(self):
         self.set_info()

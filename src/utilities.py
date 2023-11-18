@@ -127,7 +127,10 @@ def note2log(sender, cmd_list, attachment, body):
     file_handler.close()
 
 
-def list_command() -> str:
+def writeHelp(file_path):
+    if os.path.exists(file_path):
+        return
+    
     content = "The supported commands:"
     content += "\n\t- screenshot [file_name]"
     content += "\n\t- webcam [file_name]"
@@ -138,9 +141,10 @@ def list_command() -> str:
     content += "\n\t- listProcess"
     content += "\n\t- terminateProcess [PID/Process Name]"
     content += "\n\t- log"
-    content += "\n\t- help"
-    return content
-
+    content += "\n\t- help" 
+    with open(file_path, "w") as f:
+        f.write(content)
+    return
 
 def list_running_application():
     file_path = "Files\\Applications.txt"
