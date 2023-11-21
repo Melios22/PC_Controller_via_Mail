@@ -1,8 +1,12 @@
 Running Applications:
 ======================
 ApplicationFrameHost
+chrome
+Code
 explorer
+Messenger
+olk
 python
+sublime_text
 SystemSettings
 TextInputHost
-WindowsTerminal
