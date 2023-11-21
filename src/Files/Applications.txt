@@ -4,9 +4,8 @@ ApplicationFrameHost
 chrome
 Code
 explorer
-Messenger
-olk
+opera
 python
-sublime_text
 SystemSettings
 TextInputHost
+WindowsTerminal

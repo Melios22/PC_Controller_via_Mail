@@ -88,7 +88,7 @@ class Popup(customtkinter.CTkToplevel):
                 height=500,
                 justify="left",
                 anchor="nw",
-                font=("Lucida Console", 30),
+                font=("Lucida Console", 20),
             )
             label.pack(side="left")
 
@@ -170,7 +170,7 @@ class Widget(customtkinter.CTkButton):
             height=50,
             fg_color="#f3defa",
             anchor="w",
-            font=("Arial", 20, "bold"),
+            font=("Lucida Console", 20, "bold"),
             hover=False,
             text_color="black",
             border_width=2,
@@ -203,7 +203,7 @@ class Widget(customtkinter.CTkButton):
             height=20,
             fg_color="#f3defa",
             anchor="w",
-            font=("Arial", 20, "bold"),
+            font=("Lucida Console", 20, "bold"),
             hover=0,
             text_color="black",
             border_width=0,
@@ -217,7 +217,7 @@ class Widget(customtkinter.CTkButton):
             height=20,
             fg_color="#f3defa",
             anchor="w",
-            font=("Arial", 20),
+            font=("Lucida Console", 20),
             hover=0,
             text_color="black",
             border_width=0,
@@ -231,12 +231,12 @@ class Widget(customtkinter.CTkButton):
             height=20,
             fg_color="#f3defa",
             anchor="e",
-            font=("Arial", 20),
+            font=("Lucida Console", 20),
             hover=0,
             text_color="black",
             border_width=0,
         )
-        self.date_zone.place(x=self.__WIDTH / 4 * 3 - 2 * self.__x, y=12)
+        self.date_zone.place(x=self.__WIDTH / 4 * 3 - 10 * self.__x, y=12)
 
         self.subject_zone = customtkinter.CTkScrollableFrame(
             master=m_master.widget_label,
@@ -256,7 +256,7 @@ class Widget(customtkinter.CTkButton):
             height=20,
             fg_color="#f3defa",
             anchor="nw",
-            font=("Arial", 20, "bold"),
+            font=("Lucida Console", 20, "bold"),
             hover=0,
             text_color="black",
             border_width=0,
@@ -271,7 +271,7 @@ class Widget(customtkinter.CTkButton):
                 height=20,
                 fg_color="#f3defa",
                 anchor="nw",
-                font=("Arial", 20),
+                font=("Lucida Console", 20),
                 hover=0,
                 text_color="black",
                 border_width=0,
@@ -298,7 +298,7 @@ class Widget(customtkinter.CTkButton):
             height=self.__HEIGHT / 2 - 35,
             fg_color="#f3defa",
             anchor="w",
-            font=("Arial", 20, "bold"),
+            font=("Lucida Console", 20, "bold"),
             hover=0,
             text_color="black",
             border_width=2,
@@ -314,7 +314,7 @@ class Widget(customtkinter.CTkButton):
             height=20,
             fg_color="#f3defa",
             anchor="w",
-            font=("Arial", 20, "bold"),
+            font=("Lucida Console", 20, "bold"),
             hover=0,
             text_color="black",
             border_width=0,
@@ -328,7 +328,7 @@ class Widget(customtkinter.CTkButton):
             height=20,
             fg_color="#f3defa",
             anchor="w",
-            font=("Arial", 20),
+            font=("Lucida Console", 20),
             hover=0,
             text_color="black",
             border_width=0,
@@ -342,7 +342,7 @@ class Widget(customtkinter.CTkButton):
             height=20,
             fg_color="#f3defa",
             anchor="w",
-            font=("Arial", 20, "bold"),
+            font=("Lucida Console", 20, "bold"),
             hover=0,
             text_color="black",
             border_width=0,
@@ -351,12 +351,12 @@ class Widget(customtkinter.CTkButton):
 
         self.reply_subject = customtkinter.CTkButton(
             master=self.reply_zone,
-            text="reply_subject",
+            text=self.__reply_subject,
             width=self.__WIDTH - self.__WIDTH / 4,
             height=20,
             fg_color="#f3defa",
             anchor="w",
-            font=("Arial", 20),
+            font=("Lucida Console", 20),
             hover=0,
             text_color="black",
             border_width=0,
@@ -381,7 +381,7 @@ class Widget(customtkinter.CTkButton):
             height=20,
             fg_color="#f3defa",
             anchor="w",
-            font=("Arial", 20, "bold"),
+            font=("Lucida Console", 20, "bold"),
             hover=0,
             text_color="black",
             border_width=0,
@@ -389,7 +389,7 @@ class Widget(customtkinter.CTkButton):
         self.attachment_letter.grid(row=0, column=0, sticky="w")
 
         attachment_icon = customtkinter.CTkImage(
-            Image.open("assets/attach.png"), size=(30, 30)
+            Image.open("assets/attach.png"), size=(40, 40)
         )
 
         self.attach_space = [customtkinter.CTkButton] * 9
@@ -406,7 +406,7 @@ class Widget(customtkinter.CTkButton):
                 height=50,
                 fg_color="#f3defa",
                 anchor="nw",
-                font=("Arial", 20),
+                font=("Lucida Console", 20),
                 hover=0,
                 border_width=0,
                 corner_radius=0,
@@ -414,25 +414,16 @@ class Widget(customtkinter.CTkButton):
             self.attach_space[i].grid(row=row, column=col)  # Place the first widget
 
             self.attachment[i] = customtkinter.CTkButton(
-                master=self.attach_space[i],
-                text=self.new_attachment,
-                width=self.__WIDTH / 10,
-                height=20,
-                fg_color="#4c0f66",
-                anchor="nw",
-                font=("Arial", 20),
-                text_color="white",
-                hover=0,
-                border_width=2,
+                master=self.attach_space[i], text=self.new_attachment, width=self.__WIDTH / 10, height=20, fg_color="#4c0f66", anchor="nw", font=("Lucida Console",20), text_color="white", hover=0, border_width=2,
                 border_color="black",
                 image=attachment_icon,
                 command=lambda i=i: self.attachment_event(
                     command=subject[i], attachment=attachment[i]
                 ),
             )
-            self.attachment[i].grid(row=row, column=col)
-            col += 1  # Increment column count for the next widget
-            if col == 4:  # If three widgets are placed, move to the next row
+            self.attachment[i].grid(row=row, column=col + 1)
+            col += 1
+            if col == 3:  
                 row += 1
                 col = 0
 
@@ -444,7 +435,7 @@ class Widget(customtkinter.CTkButton):
             height=self.__HEIGHT / 10 - self.__y,
             fg_color="#f3defa",
             anchor="w",
-            font=("Arial", 20),
+            font=("Lucida Console", 20),
             text_color="black",
             hover=0,
             corner_radius=0,
@@ -459,25 +450,12 @@ class Widget(customtkinter.CTkButton):
             ),
         )
         self.mail_lb.place(x=2, y=2)
-        self.content = ""
-        for i in range(len(self.__subject)):
-            self.content += str(self.__subject[i])
-            self.content += " "
-
-        self.content = self.content[:30] + "..."
+        self.content =  ", ".join(self.__subject)
+        if len(self.content) > 20:
+            self.content = self.content[:17] + "..."
 
         self.subject_lb = customtkinter.CTkButton(
-            master=self,
-            text=self.content,
-            width=self.__WIDTH / 3 - self.__x,
-            height=self.__HEIGHT / 10 - self.__y,
-            fg_color="#f3defa",
-            anchor="w",
-            font=("Arial", 20),
-            text_color="black",
-            hover=0,
-            corner_radius=0,
-            command=lambda: self.button_event(
+            master=self, text=self.content, width=self.__WIDTH / 3 - self.__x, height=self.__HEIGHT / 10 - self.__y, fg_color="#f3defa", anchor="w", font=("Lucida Console", 20), text_color="black", hover=0, corner_radius=0, command=lambda: self.button_event(
                 m_master=self.__m_master,
                 sender_mail=self.__sender_mail,
                 recive_mail=self.__recive_mail,
@@ -496,7 +474,7 @@ class Widget(customtkinter.CTkButton):
             height=self.__HEIGHT / 10 - self.__y,
             fg_color="#f3defa",
             anchor="e",
-            font=("Arial", 20),
+            font=("Lucida Console", 20),
             text_color="black",
             hover=0,
             corner_radius=0,
@@ -612,7 +590,7 @@ class Mail_page(customtkinter.CTkScrollableFrame):
             height=20,
             fg_color="#f3defa",
             anchor="w",
-            font=("Arial", 20, "bold"),
+            font=("Lucida Console", 20, "bold"),
             hover=0,
             text_color="black",
         )
@@ -625,7 +603,7 @@ class Mail_page(customtkinter.CTkScrollableFrame):
             height=20,
             fg_color="#f3defa",
             anchor="w",
-            font=("Arial", 20, "bold"),
+            font=("Lucida Console", 20, "bold"),
             hover=0,
             text_color="black",
         )
@@ -638,11 +616,11 @@ class Mail_page(customtkinter.CTkScrollableFrame):
             height=20,
             fg_color="#f3defa",
             anchor="w",
-            font=("Arial", 20, "bold"),
+            font=("Lucida Console", 20, "bold"),
             hover=0,
             text_color="black",
         )
-        self.date_letter.place(x=master.APP_WIDTH / 3 * 3 - 80, y=12)
+        self.date_letter.place(x=master.APP_WIDTH / 3 * 3 - 90, y=12)
 
 
 class App(customtkinter.CTk):
@@ -684,40 +662,40 @@ class App(customtkinter.CTk):
         self.widget_label.place(x=0, y=0)
 
 
-# if __name__ == "__main__":
-#     # Splash_Screen()
-#     app = App()
+if __name__ == "__main__":
+    # Splash_Screen()
+    app = App()
 
-#     cmd_list = [
-#         "screenshot a",
-#         "webcam b",
-#         "keylog 10",
-#         "screenshot a",
-#         "webcam b",
-#         "keylog 10",
-#         "screenshot a",
-#         "webcam b",
-#         "keylog 10",
-#     ]
-#     cmd_list = [i.split(" ") for i in cmd_list]
+    cmd_list = [
+        "screenshot a",
+        "webcam b",
+        "keylog 10",
+        "screenshot a",
+        "webcam b",
+        "keylog 10",
+        "screenshot a",
+        "webcam b",
+        "keylog 10",
+    ]
+    cmd_list = [i.split(" ") for i in cmd_list]
 
-#     attachment_list = [
-#         "Files\\Pictures\\a.png",
-#         "Files\\Pictures\\b.png",
-#         "Files\\Keylog.txt",
-#         "Files\\Pictures\\a.png",
-#         "Files\\Pictures\\b.png",
-#         "Files\\Keylog.txt",
-#         "Files\\Pictures\\a.png",
-#         "Files\Pictures\\b.png",
-#         "Files\\Keylog.txt",
-#     ]
-#     for i in range(10):
-#         app.add_new_mail(
-#             sender_mail="SenderEmail",
-#             subject=cmd_list,
-#             date="Date",
-#             reply_subject="ReplySubject",
-#             attachment=attachment_list,
-#         )
-#     app.mainloop()
+    attachment_list = [
+        "Files\\Pictures\\a.png",
+        "Files\\Pictures\\b.png",
+        "Files\\Keylog.txt",
+        "Files\\Pictures\\a.png",
+        "Files\\Pictures\\b.png",
+        "Files\\Keylog.txt",
+        "Files\\Pictures\\a.png",
+        "Files\Pictures\\b.png",
+        "Files\\Keylog.txt",
+    ]
+    for i in range(10):
+        app.add_new_mail(
+            sender_mail="SenderEmail",
+            subject=cmd_list,
+            date="Date",
+            reply_subject="ReplySubject" + str(i) + " ",
+            attachment=attachment_list,
+        )
+    app.mainloop()
