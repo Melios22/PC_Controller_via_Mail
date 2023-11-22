@@ -594,7 +594,7 @@ class Mail_page(customtkinter.CTkScrollableFrame):
             hover=0,
             text_color="black",
         )
-        self.from_letter.place(x=3, y=12)
+        self.from_letter.place(x=3, y=15)
 
         self.subject_letter = customtkinter.CTkButton(
             master=self.__info_lb,
@@ -607,7 +607,7 @@ class Mail_page(customtkinter.CTkScrollableFrame):
             hover=0,
             text_color="black",
         )
-        self.subject_letter.place(x=master.APP_WIDTH / 3, y=12)
+        self.subject_letter.place(x=master.APP_WIDTH / 3, y=15)
 
         self.date_letter = customtkinter.CTkButton(
             master=self.__info_lb,
@@ -620,7 +620,7 @@ class Mail_page(customtkinter.CTkScrollableFrame):
             hover=0,
             text_color="black",
         )
-        self.date_letter.place(x=master.APP_WIDTH / 3 * 3 - 90, y=12)
+        self.date_letter.place(x=master.APP_WIDTH / 3 * 3 - 90, y=15)
 
 
 class App(customtkinter.CTk):
