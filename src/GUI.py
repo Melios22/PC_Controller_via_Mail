@@ -57,7 +57,7 @@ class Popup(customtkinter.CTkToplevel):
 
         self.type = path.split(".")[1]
 
-        if self.type in ["png", "jpg", "jpeg", "tiff", "bmp", "gif"]:
+        if self.type in ["png", "jpg", "jpeg", "tiff", "bmp"]:
             self.image = customtkinter.CTkImage(Image.open(path), size=(900, 540))
             self.image_label = customtkinter.CTkLabel(
                 master=self, image=self.image, text=""
@@ -135,6 +135,69 @@ class Widget(customtkinter.CTkButton):
         del m_master.widget_list[0:cur_len]
 
         pass
+
+    def add_widget(self):
+        self.mail_lb = customtkinter.CTkButton(
+            master=self,
+            text=self.__sender_mail,
+            width=self.__WIDTH / 3 - self.__x,
+            height=self.__HEIGHT / 10 - self.__y,
+            fg_color="#f3defa",
+            anchor="w",
+            font=("Lucida Console", 20),
+            text_color="black",
+            hover=0,
+            corner_radius=0,
+            command=lambda: self.button_event(
+                m_master=self.__m_master,
+                sender_mail=self.__sender_mail,
+                recive_mail=self.__recive_mail,
+                subject=self.__subject,
+                reply_subject=self.__reply_subject,
+                date=self.__date,
+                attachment=self.__attachment,
+            ),
+        )
+        self.mail_lb.place(x=2, y=2)
+        self.content =  ", ".join(self.__subject)
+        if len(self.content) > 20:
+            self.content = self.content[:17] + "..."
+
+        self.subject_lb = customtkinter.CTkButton(
+            master=self, text=self.content, width=self.__WIDTH / 3 - self.__x, height=self.__HEIGHT / 10 - self.__y, fg_color="#f3defa", anchor="w", font=("Lucida Console", 20), text_color="black", hover=0, corner_radius=0, command=lambda: self.button_event(
+                m_master=self.__m_master,
+                sender_mail=self.__sender_mail,
+                recive_mail=self.__recive_mail,
+                subject=self.__subject,
+                reply_subject=self.__reply_subject,
+                date=self.__date,
+                attachment=self.__attachment,
+            ),
+        )
+        self.subject_lb.place(x=self.__WIDTH / 3 + self.__x, y=2)
+
+        self.date_lb = customtkinter.CTkButton(
+            master=self,
+            text=self.__date,
+            width=self.__WIDTH / 3 - self.__x,
+            height=self.__HEIGHT / 10 - self.__y,
+            fg_color="#f3defa",
+            anchor="e",
+            font=("Lucida Console", 20),
+            text_color="black",
+            hover=0,
+            corner_radius=0,
+            command=lambda: self.button_event(
+                m_master=self.__m_master,
+                sender_mail=self.__sender_mail,
+                recive_mail=self.__recive_mail,
+                subject=self.__subject,
+                date=self.__date,
+                reply_subject=self.__reply_subject,
+                attachment=self.__attachment,
+            ),
+        )
+        self.date_lb.place(x=self.__WIDTH / 3 * 2 - 2 * self.__x, y=2)
 
     def button_event(
         self,
@@ -411,7 +474,7 @@ class Widget(customtkinter.CTkButton):
                 border_width=0,
                 corner_radius=0,
             )
-            self.attach_space[i].grid(row=row, column=col)  # Place the first widget
+            self.attach_space[i].grid(row=row, column=col)  
 
             self.attachment[i] = customtkinter.CTkButton(
                 master=self.attach_space[i], text=self.new_attachment, width=self.__WIDTH / 10, height=20, fg_color="#4c0f66", anchor="nw", font=("Lucida Console",20), text_color="white", hover=0, border_width=2,
@@ -426,69 +489,6 @@ class Widget(customtkinter.CTkButton):
             if col == 3:  
                 row += 1
                 col = 0
-
-    def add_widget(self):
-        self.mail_lb = customtkinter.CTkButton(
-            master=self,
-            text=self.__sender_mail,
-            width=self.__WIDTH / 3 - self.__x,
-            height=self.__HEIGHT / 10 - self.__y,
-            fg_color="#f3defa",
-            anchor="w",
-            font=("Lucida Console", 20),
-            text_color="black",
-            hover=0,
-            corner_radius=0,
-            command=lambda: self.button_event(
-                m_master=self.__m_master,
-                sender_mail=self.__sender_mail,
-                recive_mail=self.__recive_mail,
-                subject=self.__subject,
-                reply_subject=self.__reply_subject,
-                date=self.__date,
-                attachment=self.__attachment,
-            ),
-        )
-        self.mail_lb.place(x=2, y=2)
-        self.content =  ", ".join(self.__subject)
-        if len(self.content) > 20:
-            self.content = self.content[:17] + "..."
-
-        self.subject_lb = customtkinter.CTkButton(
-            master=self, text=self.content, width=self.__WIDTH / 3 - self.__x, height=self.__HEIGHT / 10 - self.__y, fg_color="#f3defa", anchor="w", font=("Lucida Console", 20), text_color="black", hover=0, corner_radius=0, command=lambda: self.button_event(
-                m_master=self.__m_master,
-                sender_mail=self.__sender_mail,
-                recive_mail=self.__recive_mail,
-                subject=self.__subject,
-                reply_subject=self.__reply_subject,
-                date=self.__date,
-                attachment=self.__attachment,
-            ),
-        )
-        self.subject_lb.place(x=self.__WIDTH / 3 + self.__x, y=2)
-
-        self.date_lb = customtkinter.CTkButton(
-            master=self,
-            text=self.__date,
-            width=self.__WIDTH / 3 - self.__x,
-            height=self.__HEIGHT / 10 - self.__y,
-            fg_color="#f3defa",
-            anchor="e",
-            font=("Lucida Console", 20),
-            text_color="black",
-            hover=0,
-            corner_radius=0,
-            command=lambda: self.button_event(
-                m_master=self.__m_master,
-                sender_mail=self.__sender_mail,
-                recive_mail=self.__recive_mail,
-                subject=self.__subject,
-                date=self.__date,
-                reply_subject=self.__reply_subject,
-                attachment=self.__attachment,
-            ),
-        )
-        self.date_lb.place(x=self.__WIDTH / 3 * 2 - 2 * self.__x, y=2)
 
     def __init__(
         self,
@@ -627,7 +627,7 @@ class App(customtkinter.CTk):
     APP_WIDTH = 1000
     APP_HEIGHT = 600
     self_email = "emailcontrolMMT@gmail.com"
-    sender_email = ""
+    sender_email = ""   
     widget_list = []
 
     def add_new_mail(
@@ -656,46 +656,6 @@ class App(customtkinter.CTk):
         self.geometry(f"{self.APP_WIDTH}x{self.APP_HEIGHT}+{x}+{y}")
         self.resizable(False, False)
         self.configure(fg_color="#f3defa")
-        # self.focus_force()
         self.after(201, lambda: self.iconbitmap("assets\\icon4.ico"))
         self.widget_label = Mail_page(master=self)
         self.widget_label.place(x=0, y=0)
-
-
-if __name__ == "__main__":
-    # Splash_Screen()
-    app = App()
-
-    cmd_list = [
-        "screenshot a",
-        "webcam b",
-        "keylog 10",
-        "screenshot a",
-        "webcam b",
-        "keylog 10",
-        "screenshot a",
-        "webcam b",
-        "keylog 10",
-    ]
-    cmd_list = [i.split(" ") for i in cmd_list]
-
-    attachment_list = [
-        "Files\\Pictures\\a.png",
-        "Files\\Pictures\\b.png",
-        "Files\\Keylog.txt",
-        "Files\\Pictures\\a.png",
-        "Files\\Pictures\\b.png",
-        "Files\\Keylog.txt",
-        "Files\\Pictures\\a.png",
-        "Files\Pictures\\b.png",
-        "Files\\Keylog.txt",
-    ]
-    for i in range(10):
-        app.add_new_mail(
-            sender_mail="SenderEmail",
-            subject=cmd_list,
-            date="Date",
-            reply_subject="ReplySubject" + str(i) + " ",
-            attachment=attachment_list,
-        )
-    app.mainloop()
