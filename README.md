@@ -53,7 +53,7 @@ The included body is the command to be executed. The program will execute the co
 ```
 - 📝Command list: 
 ```python
-  Screenshot [file_name]
+  screenshot [file_name]
 ```
 > <details>
 >  <summary>How it works</summary>
@@ -65,7 +65,7 @@ The included body is the command to be executed. The program will execute the co
 
 
 ```python
-  Webcam [file_name]
+  webcam [file_name]
 ```
 > <details>
 >  <summary>How it works</summary>
@@ -77,7 +77,7 @@ The included body is the command to be executed. The program will execute the co
 
 
 ```python
-  Keylog [time_in_seconds]
+  keylog [time_in_seconds]
 ```
 > <details>
 >  <summary>How it works</summary>
@@ -89,7 +89,7 @@ The included body is the command to be executed. The program will execute the co
 
 
 ```python
-  Logout
+  logout
 ```
 > <details>
 >  <summary>How it works</summary>
@@ -98,7 +98,7 @@ The included body is the command to be executed. The program will execute the co
 
 
 ```python
-  Shutdown [time_in_seconds]
+  shutdown [time_in_seconds]
 ```
 > <details>
 >  <summary>How it works</summary>
@@ -109,7 +109,7 @@ The included body is the command to be executed. The program will execute the co
 
 
 ```python
-  ListApp
+  listApp
 ```
 > <details>
 >  <summary>How it works</summary>
@@ -119,7 +119,7 @@ The included body is the command to be executed. The program will execute the co
 ></details>
 
 ```python
-  ListProcess
+  listProcess
 ```
 > <details>
 >  <summary>How it works</summary>
@@ -129,7 +129,7 @@ The included body is the command to be executed. The program will execute the co
 ></details>
 
 ```python
-  TerminateProcess [PID/Process_Name]
+  terminateProcess [PID/Process_Name]
 ```
 > <details>
 >  <summary>How it works</summary>
@@ -143,7 +143,7 @@ The included body is the command to be executed. The program will execute the co
 ></details>
 
 ```python
-  Log
+  log
 ```
 > <details>
 >  <summary>How it works</summary>
@@ -161,7 +161,7 @@ The included body is the command to be executed. The program will execute the co
 ></details>
 
 ```python
-  Help
+  help
 ```
 > <details>
 >  <summary>How it works</summary>
