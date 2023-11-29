@@ -15,7 +15,7 @@ def test_main():
 
 def main():
     mail = Mail()
-    # GUI.Splash_Screen()
+    GUI.Splash_Screen()
     app = GUI.App()
     app.after(0, lambda: mail.run(app))
     app.mainloop()
