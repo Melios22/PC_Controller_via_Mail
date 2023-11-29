@@ -6,7 +6,7 @@ from loading import *
 from utilities import *
 
 #! cmd_list: 2d list
-#! attachmnt: 1d list
+#! attachment: 1d list
 
 
 class Mail:
