@@ -1,49 +1,7 @@
 import tkinter as tk
 
 import customtkinter
-from PIL import Image, ImageTk
-
-
-def Splash_Screen():
-    def quit():
-        for after_id in root.tk.eval("after info").split():
-            root.after_cancel(after_id)
-        root.after(1000, root.destroy)
-
-    root = tk.Tk()
-    _width = 900
-    _height = 500
-    root.geometry(f"{_width}x{_height}+{_width // 3}+{_height // 5}")
-    root.title("PC Controller via Email")
-    root.resizable(False, False)
-    root.overrideredirect(True)
-    gif_file = Image.open("assets\\yasuo.gif")
-    size = gif_file.n_frames
-    frames = []
-    for i in range(size):
-        gif_file.seek(i)
-        photo = ImageTk.PhotoImage(gif_file)
-        frames.append(photo)
-
-    loop_frames = gif_file.info["duration"]
-    gif_label = tk.Label(root, image=frames[0])
-    gif_label.pack()
-
-    def update(ind, counter):
-        if counter < loop_frames * 2:
-            frame = frames[ind]
-            ind += 1
-            if ind == size:
-                ind = 0
-            gif_label.config(image=frame)
-            root.after(loop_frames, update, ind, counter + 1)
-        else:
-            quit()
-
-    root.after(0, lambda: update(0, 0))
-    root.protocol("WM_DELETE_WINDOW", quit)
-    root.mainloop()
-
+from PIL import Image
 
 class Popup(customtkinter.CTkToplevel):
     def __init__(self, self_title: str, path: str = None, **kwargs):
@@ -51,7 +9,7 @@ class Popup(customtkinter.CTkToplevel):
         self.geometry(f"{900}x{540}+{self.winfo_x() + 350}+{self.winfo_y() + 150}")
         self.title(self_title)
         self.resizable(False, False)
-        self.after(201, lambda: self.iconbitmap("assets\\icon4.ico"))
+        self.after(201, lambda: self.iconbitmap("assets\\icon.ico"))
         self.focus_force()
         self.grab_set()
 
@@ -656,6 +614,6 @@ class App(customtkinter.CTk):
         self.geometry(f"{self.APP_WIDTH}x{self.APP_HEIGHT}+{x}+{y}")
         self.resizable(False, False)
         self.configure(fg_color="#f3defa")
-        self.after(201, lambda: self.iconbitmap("assets\\icon4.ico"))
+        self.after(201, lambda: self.iconbitmap("assets\\icon.ico"))
         self.widget_label = Mail_page(master=self)
         self.widget_label.place(x=0, y=0)
