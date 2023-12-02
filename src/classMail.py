@@ -5,15 +5,18 @@ from GUI import *
 from loading import *
 from utilities import *
 
+#! cmd_list: 2d list
+#! attachment: 1d list
+
 
 class Mail:
     def __init__(self):
         self.sender: str = ""
+        self.command: list = []
         self.cmd_list: list = []
-        self.attachment: str = ""
+        self.attachment: list = []
 
         self.body: str = ""  # Reply message
-        self.subject: str = "Re: Mail Control: "
         self.email_message: MIMEMultipart
 
     def fetch_mail(self):
@@ -48,41 +51,35 @@ class Mail:
         except:
             pass
 
-    def screenshot(self):
-        self.attachment = capture_SS(self.cmd_list)
-        self.set_info("Screenshot")
+    def screenshot(self, lst: list = []):
+        self.attachment.append(capture_SS(lst))
 
-        self.body = "A screenshot of your PC taken at " + current_time() + "."
-        self.email_message.attach(MIMEText(self.body, "plain"))
+        # self.email_message.attach(MIMEText(self.body, "plain"))
 
-        with open(self.attachment, "rb") as picture_file:
+        with open(self.attachment[-1], "rb") as picture_file:
             picture_attachment = MIMEImage(
-                picture_file.read(), name=os.path.basename(self.attachment)
+                picture_file.read(), name=os.path.basename(self.attachment[-1])
             )
             self.email_message.attach(picture_attachment)
 
-    def webcam(self):
-        self.attachment, self.body = capture_webcam(self.cmd_list)
-        self.set_info("Webcam")
+    def webcam(self, lst: list = []):
+        tmp_path, tmp_mes = capture_webcam(lst)
+        self.body += tmp_mes
+        self.attachment.append(tmp_path)
+        # self.email_message.attach(MIMEText(self.body, "plain"))
 
-        self.email_message.attach(MIMEText(self.body, "plain"))
-
-        with open(self.attachment, "rb") as picture_file:
+        with open(self.attachment[-1], "rb") as picture_file:
             picture_attachment = MIMEImage(
-                picture_file.read(), name=os.path.basename(self.attachment)
+                picture_file.read(), name=os.path.basename(self.attachment[-1])
             )
             self.email_message.attach(picture_attachment)
 
-    def keylogger(self):
-        self.attachment, duration = key_logger(self.cmd_list)
-        self.set_info("Keylog")
+    def keylogger(self, lst: list = []):
+        self.attachment.append(key_logger(lst))
 
-        self.body = (
-            "The program records your keystrokes for " + str(duration) + " seconds."
-        )
         self.email_message.attach(MIMEText(self.body, "plain"))
 
-        with open(self.attachment, "r") as text_file:
+        with open(self.attachment[-1], "r") as text_file:
             text_attachment = MIMEText(text_file.read())
             text_attachment.add_header(
                 "Content-Disposition", "attachment; filename= Keylogger.txt"
@@ -90,67 +87,58 @@ class Mail:
             self.email_message.attach(text_attachment)
 
     #! Add log to logout shutdown
-    def logout(self):
-        self.set_info("Logout")
-        self.body = "Logged out of your PC."
+    def logout(self, lst: list = []):
+        self.body += "Logging out of your PC.\n"
         self.email_message.attach(MIMEText(self.body, "plain"))
 
         self.send_mail()
         os.system("shutdown -l")
 
-    def shutdown(self):
-        time = self.cmd_list[1] if len(self.cmd_list) > 1 else 10
+    def shutdown(self, lst: list = []):
+        time = lst[1] if len(lst) > 1 else 10
 
-        self.set_info("Shutdown")
-        self.body = "Shutting down your PC in " + str(time) + " seconds."
+        self.body += "Shutting down your PC in " + str(time) + " seconds.\n"
         self.email_message.attach(MIMEText(self.body, "plain"))
 
         self.send_mail()  #! only shutdown process has the send_mail inside
         sleep(2)
         os.system("shutdown /s /t now")
 
-    def list_app(self):
-        self.attachment = list_running_application()
+    def list_app(self, lst: list = []):
+        self.attachment.append(list_running_application())
 
-        self.set_info("List Applications")
-        self.body = "The list of running applications of your PC."
         self.email_message.attach(MIMEText(self.body, "plain"))
 
-        with open(self.attachment, "r") as text_file:
+        with open(self.attachment[-1], "r") as text_file:
             text_attachment = MIMEText(text_file.read())
             text_attachment.add_header(
                 "Content-Disposition", "attachment; filename= RunningApplications.txt"
             )
             self.email_message.attach(text_attachment)
 
-    def list_process(self):
-        self.attachment = list_running_process()
+    def list_process(self, lst: list = []):
+        self.attachment.append(list_running_process())
 
-        self.set_info("List Processes")
-        self.body = "The list of running processes of your PC."
         self.email_message.attach(MIMEText(self.body, "plain"))
 
-        with open(self.attachment, "r") as text_file:
+        with open(self.attachment[-1], "r") as text_file:
             text_attachment = MIMEText(text_file.read())
             text_attachment.add_header(
                 "Content-Disposition", "attachment; filename= RunningProcesses.txt"
             )
             self.email_message.attach(text_attachment)
 
-    def terminate_process(self):
+    def terminate_process(self, lst: list = []):
         try:
-            self.set_info("Terminate Process")
-            self.body = kill_process(self.cmd_list[1])
+            self.body += kill_process(lst[1]) + "\n"
         except IndexError:
-            self.set_info("Terminate Process Failed")
-            self.body = "ERROR: Missing argument.\n"
+            self.body += "ERROR: Terminate process command misses an argument.\n"
         self.email_message.attach(MIMEText(self.body, "plain"))
 
-    def send_log(self):
+    def send_log(self, lst=[]):
         file_path = "Files\\mail.log"
-        self.set_info("Log File")
+        self.attachment.append(file_path)
 
-        self.body = "Program's log file."
         self.email_message.attach(MIMEText(self.body, "plain"))
 
         with open(file_path, "r") as text_file:
@@ -160,47 +148,71 @@ class Mail:
             )
             self.email_message.attach(text_attachment)
 
-    def help(self):
-        self.body += list_command()
-        self.set_info("Help")
+    def help(self, lst: list = []):
+        writeHelp(file_path := "Files\\help.txt")
+
+        self.attachment.append(file_path)
         self.email_message.attach(MIMEText(self.body, "plain"))
 
+        with open(file_path, "r") as text_file:
+            text_attachment = MIMEText(text_file.read())
+            text_attachment.add_header(
+                "Content-Disposition", "attachment; filename= mail.log"
+            )
+            self.email_message.attach(text_attachment)
+
     def process_command(self):
+        self.set_info()
+
         command = {
             "screenshot": [self.screenshot, "perform capturing screenshot"],
             "webcam": [self.webcam, "perform capturing from webcam"],
             "keylog": [self.keylogger, "perform keylogging"],
             "logout": [self.logout, "logout from your PC"],
             "shutdown": [self.shutdown, "shutdown your PC"],
-            "listApp": [self.list_app, "list running applications"],
-            "listProcess": [self.list_process, "list running processes"],
-            "terminateProcess": [self.terminate_process, "terminate a process"],
+            "listapp": [self.list_app, "list running applications"],
+            "listprocess": [self.list_process, "list running processes"],
+            "terminateprocess": [self.terminate_process, "terminate a process"],
             "log": [self.send_log, "get the log file of your PC"],
             "help": [self.help, "get the list of commands"],
         }
+        for i in range(len(self.cmd_list)):
+            self.cmd_list[i][0] = self.cmd_list[i][0].lower()
+        if ["logout"] in self.cmd_list:
+            self.cmd_list.remove(["logout"])
+            self.cmd_list.append(["logout"])
+        elif ["shutdown"] in self.cmd_list:
+            self.cmd_list.remove(["shutdown"])
+            self.cmd_list.append(["shutdown"])
 
-        if self.cmd_list[0] in command:
-            try:
-                command[self.cmd_list[0]][0]()
-            except Exception:
-                print(f"ERROR: Cannot {command[self.cmd_list[0]][1]}")
-        else:
-            self.body = "ERROR: Invalid command.\n"
-            self.help()
+        check: bool = False
+        for comd in self.cmd_list:
+            if comd[0] in command:
+                try:
+                    command[comd[0]][0](comd)
+                except Exception:
+                    self.body += f"ERROR: Cannot {command[comd[0]][1]}\n"
+            else:
+                check = True
+        
+        if check:
+            self.body += "ERROR: Invalid command. Review the help.txt file for more information.\n"
+            self.help()         
 
     def write_log(self):
         note2log(self.sender, self.cmd_list, self.attachment, self.body)
 
-    def set_info(self, message: str):
+    def set_info(self):
         self.email_message = MIMEMultipart()
         self.email_message["From"] = USERNAME
         self.email_message["To"] = self.sender
-        self.email_message["Subject"] = self.subject + message
+        self.email_message["Subject"] = "Re: Mail Control"
 
     def refresh(self):
         self.sender = ""
         self.cmd_list = []
-        self.attachment = ""
+        self.command = []
+        self.attachment = []
 
         self.body = ""
         self.email_message = None
@@ -208,19 +220,21 @@ class Mail:
     def run(self, app):
         self.fetch_mail()
         if self.cmd_list:
-      
+            self.command = self.cmd_list.copy()
             self.process_command()
             self.write_log()
 
             print(self.body, self.attachment)
-            command = " ".join(self.cmd_list)
-            app.add_new_mail(self.sender, command, current_time(), self.body, self.attachment)
+            
+            for i in range(len(self.command)):
+                self.command[i] = " ".join(self.command[i])
+            
+            app.add_new_mail(
+                self.sender, self.command, current_time(), self.body, self.attachment
+            )
+            # Thread(target=self.send_mail_async, args=(app, command)).start()
 
             self.send_mail()
             self.refresh()
 
-            # if not spinner.process.is_alive():
-            #     spinner = CLI_Spinner("\rWaiting for new mail", 0.5)
-            #     spinner.start()
-            
-        app.after(1000, lambda : self.run(app))
+        app.after(2000, lambda: self.run(app))

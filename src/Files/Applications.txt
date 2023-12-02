@@ -1,8 +1,12 @@
 Running Applications:
 ======================
 ApplicationFrameHost
+chrome
 explorer
+Messenger
+obs64
 python
-SystemSettings
+RtkUWP
+Taskmgr
 TextInputHost
 WindowsTerminal
