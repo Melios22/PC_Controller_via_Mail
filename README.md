@@ -186,4 +186,4 @@ Or watch directly in here 👇
 **22127465 - [Bui Nguyen Lan Vy](https://github.com/buinguyenlanvy)** \
 **22127475 - [Diep Gia Huy](https://github.com/kggmt)** 
 
-# [🏠 Home](#PC-Controller-via-Mail-)
+# [🏠 Back to top](#PC-Controller-via-Mail-)
