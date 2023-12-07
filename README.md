@@ -1,6 +1,6 @@
 # PC Controller via Mail 🌐
 <h1 align="left">
-  <img src="src/assets/icon4.png" alt="icon" width="200"></img>
+  <img src="src/assets/icon.png" alt="icon" width="200"></img>
 </h1>
 
 
