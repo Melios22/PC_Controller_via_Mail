@@ -69,6 +69,7 @@ class Widget(customtkinter.CTkButton):
     __date = ""
     __attachment = []
 
+
     def attachment_event(self, command: str, attachment: str):
         self.popup = Popup(self_title=command, path=attachment, master=self)
         return
@@ -77,6 +78,7 @@ class Widget(customtkinter.CTkButton):
         for widget in m_master.widget_list:
             widget.destroy()
 
+        m_master.widget_label.destroy()
         m_master.widget_label = Mail_page(master=m_master)
         m_master.widget_label.place(x=0, y=0)
 
@@ -116,6 +118,7 @@ class Widget(customtkinter.CTkButton):
                 attachment=self.__attachment,
             ),
         )
+
         self.mail_lb.place(x=2, y=2)
         self.content =  ", ".join(self.__subject)
         if len(self.content) > 20:
@@ -157,6 +160,9 @@ class Widget(customtkinter.CTkButton):
         )
         self.date_lb.place(x=self.__WIDTH / 3 * 2 - 2 * self.__x, y=2)
 
+        
+
+
     def button_event(
         self,
         m_master,
@@ -174,7 +180,7 @@ class Widget(customtkinter.CTkButton):
             master=m_master.widget_label,
             text="",
             width=self.__WIDTH + 15,
-            height=self.__HEIGHT / 10 + 3,
+            height=self.__HEIGHT / 10 + 4,
             fg_color="#f3defa",
             anchor="w",
             corner_radius=0,
@@ -484,7 +490,6 @@ class Widget(customtkinter.CTkButton):
         self.__date = date
         self.__attachment = attachment
         self.__reply_subject = reply_subject
-
         self.add_widget()
 
 
@@ -511,10 +516,11 @@ class Mail_page(customtkinter.CTkScrollableFrame):
             reply_subject=reply_subject,
             attachment=attachment,
         )
-        if self.widget not in master.widget_list:
-            master.widget_list.append(self.widget)
+        
+        master.widget_list.append(self.widget)
 
         self.widget.pack(after=self.__info_lb, padx=5, pady=5)
+
 
     def __init__(self, master, **kwargs):
         super().__init__(master, **kwargs)
@@ -579,6 +585,7 @@ class Mail_page(customtkinter.CTkScrollableFrame):
             text_color="black",
         )
         self.date_letter.place(x=master.APP_WIDTH / 3 * 3 - 90, y=15)
+        
 
 
 class App(customtkinter.CTk):
@@ -587,7 +594,10 @@ class App(customtkinter.CTk):
     self_email = "emailcontrolMMT@gmail.com"
     sender_email = ""   
     widget_list = []
-
+    def back_to_home(self):
+        if len(self.widget_list) > 0:
+            self.widget_list[0].home_button_event(m_master=self)
+        
     def add_new_mail(
         self,
         sender_mail: str,
@@ -605,6 +615,10 @@ class App(customtkinter.CTk):
             attachment=attachment,
             reply_subject=reply_subject,
         )
+
+        
+
+
 
     def __init__(self):
         super().__init__()

@@ -228,13 +228,13 @@ class Mail:
             
             for i in range(len(self.command)):
                 self.command[i] = " ".join(self.command[i])
-            
+            app.back_to_home()
             app.add_new_mail(
                 self.sender, self.command, current_time(), self.body, self.attachment
             )
-            # Thread(target=self.send_mail_async, args=(app, command)).start()
+          
 
             self.send_mail()
             self.refresh()
 
-        app.after(2000, lambda: self.run(app))
+        app.after(1000, lambda: self.run(app))
